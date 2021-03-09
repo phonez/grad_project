@@ -1,5 +1,5 @@
-March
--3.8
+>>>>March<<<<
+#### 8th & 9th
 1. 
 目标--在Ubuntu中测试HowToMakeRotamerLibraries部分给出的make_inputs.bash脚本
 结果--将31行代码修改为sed -i "s/$phi_string/$phi/g" $output_in，32行代码做类似的修改，脚本即可正常运行
@@ -10,4 +10,8 @@ March
 （1）PDB中检索（query）字段：( Full Text = "unnatural" OR Full Text = "non-canonical" ) AND Full Text = "peptide"
 （2）查看候选结果中的pdb是否符合要求
 ？PDB检索字段不支持正则表达式
-结果--从前500百个候选结果中筛选，以表格形式记录，包括（年份，DOI，标题，POI，ncaa等信息，其中rank表示对候选者优劣排序）
+结果--从前200个候选结果中筛选，以表格形式记录，包括（年份，DOI，标题，POI，ncaa等信息，其中rank表示对候选者优劣排序）
+
+#### 10th
+1.
+目标--从表格中确定最终用于测试的benchmark
