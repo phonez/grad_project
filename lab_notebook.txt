@@ -1,17 +1,30 @@
 >>>>March<<<<
 #### 8th & 9th
 1. 
-目标--在Ubuntu中测试HowToMakeRotamerLibraries部分给出的make_inputs.bash脚本
-结果--将31行代码修改为sed -i "s/$phi_string/$phi/g" $output_in，32行代码做类似的修改，脚本即可正常运行
+--目标--
+在Ubuntu中测试HowToMakeRotamerLibraries部分给出的make_inputs.bash脚本。
+--结果--
+将31行代码修改为sed -i "s/$phi_string/$phi/g" $output_in，32行代码做类似的修改，脚本即可正常运行。
 
 2. 
-目标--在PDB数据库中寻找包含非天然氨基酸（ncaa）的蛋白质-多肽复合物结构，确定整个计算流程的测试基准（benchmark）
-方法--
-（1）PDB中检索（query）字段：( Full Text = "unnatural" OR Full Text = "non-canonical" ) AND Full Text = "peptide"
-（2）查看候选结果中的pdb是否符合要求
+--目标--
+在PDB数据库中寻找包含非天然氨基酸（ncaa）的蛋白质-多肽复合物结构，确定整个计算流程的测试基准（benchmark）。
+--方法--
+（1）PDB中检索（query）字段：( Full Text = "unnatural" OR Full Text = "non-canonical" ) AND Full Text = "peptide"。
+（2）查看候选结果中的pdb是否符合要求。
 ？PDB检索字段不支持正则表达式
-结果--从前200个候选结果中筛选，以表格形式记录，包括（年份，DOI，标题，POI，ncaa等信息，其中rank表示对候选者优劣排序）
+--结果--
+从前200个候选结果中筛选，以表格形式记录，包括（年份，DOI，标题，POI，ncaa等信息，其中rank表示对候选者优劣排序）。
 
 #### 10th
 1.
-目标--从表格中确定最终用于测试的benchmark
+--目标--
+从表格中确定最终用于测试的benchmark。
+--方法--
+筛选文献的策略：
+（1）对于肽段而言，除去C端和N端，每个位点是天然或非天然氨基酸。非天然氨基酸最好能够满足rosetta对ncaa的要求。
+（2）尽可能给出详细的实验数据。针对文献中设计的非天然多肽，应给出抑制常数或IC50等数据，便于后续生化实验验证。
+（3）蛋白质与多肽非共价结合。
+（4）研究较多的蛋白质、使用频率较高的ncaa可以优先考虑。
+--结果--
+完成一部分筛选，统计在ppt中。
