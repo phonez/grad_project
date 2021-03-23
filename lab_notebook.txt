@@ -1,39 +1,106 @@
->>>>March<<<<
-#### 8th & 9th
-1. 
---目标--
+## 第一周
+
+### 本周目标：
+建立用于**结构预测**和**序列设计**的测试基准（benchmark）。
+
+#### 周一 & 周二
+* 目标
 在Ubuntu中测试HowToMakeRotamerLibraries部分给出的make_inputs.bash脚本。
---结果--
+* 结果
 将31行代码修改为sed -i "s/$phi_string/$phi/g" $output_in，32行代码做类似的修改，脚本即可正常运行。
 
-2. 
---目标--
+* 目标
 在PDB数据库中寻找包含非天然氨基酸（ncaa）的蛋白质-多肽复合物结构，确定整个计算流程的测试基准（benchmark）。
---方法--
-（1）PDB中检索（query）字段：( Full Text = "unnatural" OR Full Text = "non-canonical" ) AND Full Text = "peptide"。
-（2）查看候选结果中的pdb是否符合要求。
+* 方法
+1. PDB中检索（query）字段：( Full Text = "unnatural" OR Full Text = "non-canonical" ) AND Full Text = "peptide"。
+2. 查看候选结果中的pdb是否符合要求。
 ？PDB检索字段不支持正则表达式
---结果--
-从前200个候选结果中筛选，以表格形式记录，包括（年份，DOI，标题，POI，ncaa等信息，其中rank表示对候选者优劣排序），统计在ncaa-containing_complex.xlsx中。
+* 结果
+从前200个候选结果中筛选，以表格形式记录，包括（年份，DOI，标题，POI，ncaa等信息，其中rank表示对候选者优劣排序），统计在ncaa-containing_complex.xlsx中（<https://github.com/phonez/grad_project/tree/master/benchmark>）。
 
-#### 10th
-1.
---目标--
+#### 周三
+* 目标
 从表格中确定最终用于测试的benchmark。
---方法--
+* 方法
 筛选文献的策略：
-（1）对于肽段而言，除去C端和N端，每个位点是天然或非天然氨基酸。非天然氨基酸最好能够满足rosetta对ncaa的要求。
-（2）尽可能给出详细的实验数据。针对文献中设计的非天然多肽，应给出抑制常数或IC50等数据，便于后续生化实验验证。
-（3）蛋白质与多肽非共价结合。
-（4）研究较多的蛋白质、使用频率较高的ncaa可以优先考虑。
-（5）暂不考虑订书肽（或其它类似的constrained peptide）。
---结果--
+1. 对于肽段而言，除去C端和N端，每个位点是天然或非天然氨基酸。非天然氨基酸最好能够满足rosetta对ncaa的要求。
+2. 尽可能给出详细的实验数据。针对文献中设计的非天然多肽，应给出抑制常数或IC50等数据，便于后续生化实验验证。
+3. 蛋白质与多肽非共价结合。
+4. 研究较多的蛋白质、使用频率较高的ncaa可以优先考虑。
+5. 暂不考虑订书肽（或其它类似的constrained peptide）。
+* 结果
 完成一部分筛选，统计在benchmark.pptx中。
 
-#### 11th
-1.
---目标--
+#### 周四
+* 目标
 从表格中确定最终用于测试的benchmark。
---结果--
-完成筛选，统计在benchmark.pptx中。
+* 结果
+完成筛选，统计在benchmark.pptx中（<https://github.com/phonez/grad_project/tree/master/benchmark>）。
 
+#### 周五 & 周六
+* 目标
+在PDB数据库中寻找包含ncaa的蛋白质结构，用以验证：在【结构预测】过程中，给出的采样-打分体系对于正确预测包含ncaa的蛋白质结构是可靠的（能够很好地符合native蛋白质结构）。
+* 方法
+PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Text = ""non-canonical amino acid"" 。
+
+------------------------------------------------
+
+## 第二周
+
+### 本周目标
+以4IWW.pdb为例，使用rosetta构建一套**采样-打分体系**。
+
+#### 周一 & 周二
+* 目标 
+以4IWW.pdb为例，生成ncaa对应的params文件以及rosetta可读的pdb文件。
+* 方法
+1. 依照已经建立的流程，生成BP5.params文件。
+2. 该结构为二聚体，从pymol中选出其中一条链（A链），除去水分子（solvent）和硫酸根离子，保留Co(II)，保存为4iww_A.pdb。
+3. pdb文件中ncaa的原子类型为HETATM（非标准基团原子坐标），且原子编号与BP5.params文件给出的不符。做如下修改：HETATM改为ATOM，依据BP5.params文件和PDB中ATOM项格式对原子编号进行替换（手动替换）。
+* 结果
+1. 生成BP5.params文件过程中，发现molfile_to_params_polymer.py仍存在chi角指定不正确的bug。
+2. 生成4iww_for_rosetta.pdb文件。
+
+* 目标
+在rosetta中读取4iww_for_rosetta.pdb文件和导入BP5.params文件，构建采样-打分体系。
+* 方法
+学习RosettaScripts的XML语法及各模块含义。
+
+#### 周三 & 周四
+* 目标
+更新从非天然氨基酸mol2文件生成.params文件的流程。
+* 方法
+1. 运行gen_gaussian_input.py生成gjf文件（高斯输入文件）。方法，基组与关键词分别为：B3LYP，6-31G(d)，em=GD3BJ Opt=ModRedundant。
+2. 运行runall.bash脚本计算所有gjf文件，生成log文件（高斯输入文件）。
+3. 命令行下输入obabel -i g09 ./XXX.log -o mol -O ./XXX.mol，得到mol文件。
+4. 运行gen_modified_molfile.py在mol文件文本最后加入ROOT等与原子树相关的信息。
+5. 运行修改后的molfile_to_params_polymer.py，生成params文件。
+6. 检验params文件的chi角是否指认正确（这是由于molfile_to_params_polymer.py仍存在bug，待更新）。
+* 结果
+相关python、bash脚本。（<https://github.com/phonez/grad_project/tree/master/gen_params_protocol/>）
+
+#### 周五
+* 目标
+验证4iww_for_rosetta.pdb文件能被rosetta正确读入，同时验证BP5.params文件的正确性。
+* 方法
+对含有BP5的蛋白做relax，查看：
+1. 在读入4iww_for_rosetta.pdb过程中是否报错（是否报告与params文件相关的错误）。
+2. relax前后蛋白结构的变化是否合理。一般而言，打分更低，RMSD不会太大。
+* 结果
+4iww_for_rosetta.pdb和BP5.params文件均能被正确读入。
+
+------------------------------------------------
+
+## 第三周
+
+### 本周目标
+给出根据params文件修改含有ncaa的pdb文件的程序，并综合前期结果；在天然蛋白指定位点插入ncaa。
+
+#### 周一 & 周二
+* 目标
+给出根据params文件修改含有ncaa的pdb文件的程序，并综合前期结果。
+* 结果
+1. 完整的gen_params_protocol：从初始结构到params文件的系列脚本。
+2. 针对4iww_A.pdb，初步完成对pdb中文件中ncaa部分进行修改的脚本。
+3. pdb文件需要做初步的处理（去除水分子，去除盐离子，如果必要只保留多聚体中的一条链），这一步待自动化。
+4. 
