@@ -103,4 +103,6 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 1. 完整的gen_params_protocol：从初始结构到params文件的系列脚本。
 2. 针对4iww_A.pdb，初步完成对pdb中文件中ncaa部分进行修改的脚本。
 3. pdb文件需要做初步的处理（去除水分子，去除盐离子，如果必要只保留多聚体中的一条链），这一步待自动化。
-4. 
+
+#### 周三 & 周四
+

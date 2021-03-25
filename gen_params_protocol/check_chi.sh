@@ -14,8 +14,9 @@ has_next_chi=0
 for paramsfile in *.params
 do
 tmp=`grep "${wrong_chi}" ${paramsfile}`
+result=$?
 
-if [ $?==${has_wrong_chi} ]
+if (( ${result}==${has_wrong_chi} ))
 then
     sed -i '/'"${wrong_chi}"'/d' ${paramsfile} # delete wrong chi
     
