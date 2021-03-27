@@ -1,6 +1,9 @@
+'''
+structure optimization (FastRelax) of protein containing ncaa
+'''
+
 from pyrosetta import *
-#from pyrosetta.rosetta.protocols.relax import FastRelax
-# to be updated...there is something wrong with FastRelax()
+from pyrosetta.rosetta.protocols.relax import FastRelax
 
 ncaa = "BP5"
 pdb = "4iww_A"
@@ -19,15 +22,11 @@ pose = pose_from_file(modified_pdb_file)
 origin_pose = pose_from_file(pdb_file)
 
 sfxn = get_score_function(True)
+fr = FastRelax(sfxn)
+fr.apply(pose)
+fr.apply(origin_pose)
+
 print("Before integration:")
 print(sfxn(origin_pose))
 print("Integrated with ncaa:")
 print(sfxn(pose))
-
-
-'''
-fr = FastRelax()
-fr.apply(pose) # core dumped happened here
-print("After relax:")
-print(sfxn(pose))
-'''

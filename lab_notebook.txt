@@ -48,11 +48,11 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 ## 第二周
 
 ### 本周目标
-以4IWW.pdb为例，使用rosetta构建一套**采样-打分体系**。
+以4iww.pdb为例，使用rosetta构建一套**采样-打分体系**。
 
 #### 周一 & 周二
 * 目标 
-以4IWW.pdb为例，生成ncaa对应的params文件以及rosetta可读的pdb文件。
+以4iww.pdb为例，生成ncaa对应的params文件以及rosetta可读的pdb文件。
 * 方法
 1. 依照已经建立的流程，生成BP5.params文件。
 2. 该结构为二聚体，从pymol中选出其中一条链（A链），除去水分子（solvent）和硫酸根离子，保留Co(II)，保存为4iww_A.pdb。
@@ -100,9 +100,31 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 * 目标
 给出根据params文件修改含有ncaa的pdb文件的程序，并综合前期结果。
 * 结果
-1. 完整的gen_params_protocol：从初始结构到params文件的系列脚本。
+1. 完整的gen_params_protocol：从初始结构mol2文件到params文件的系列脚本。
 2. 针对4iww_A.pdb，初步完成对pdb中文件中ncaa部分进行修改的脚本。
 3. pdb文件需要做初步的处理（去除水分子，去除盐离子，如果必要只保留多聚体中的一条链），这一步待自动化。
+（<https://github.com/phonez/grad_project/tree/master/pipeline/>）
 
 #### 周三 & 周四
+* 目标
+给出根据params文件修改含有ncaa的pdb文件的程序；读入带有ncaa的pdb，并进行结构优化。同时验证生成的params文件正确无误。
+* 方法
+在PyRosetta环境下，采用FastRelax()对蛋白质做结构优化，比较未修改的pdb文件（保留HETATM）和修改后的pdb文件蛋白质的打分。
+* 结果
+1. 修改pdb文件的脚本gen_modified_pdb.py。
+2. 对蛋白质做结构优化的脚本relax_protein.py。
+3. 对于4iww.pdb和BP5一例，打分合理，上述方法暂未发现问题。
+（<https://github.com/phonez/grad_project/tree/master/validate_params_protocol/>）
 
+#### 周五
+* 目标
+在天然蛋白指定位点突变成ncaa。
+* 方法
+1. 以4iww.pdb为例，pdb序号为133的氨基酸是BP5，考虑先把该位点突变回Ile，再检查能否成功突变成BP5。
+2. 创建resfile，运行relax.mpi。
+* 结果
+1. 指定位点能够突变回Ile，但并未突变成BP5；运行过程中提示WARNING（including current in order to get at least 1 rotamer）
+2. 猜测是缺少BP5.rotlib的缘故，不能构建BP5的rotamers。
+
+### 下周目标
+在天然蛋白指定位点插入ncaa；在benchmark已知位点进行ncaa结构优化，测试构象是否合理；创建score-RMSD坐标图。
