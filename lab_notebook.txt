@@ -129,6 +129,7 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 ------------------------------------------------
 
 ## 第四周
+
 ### 本周目标
 在天然蛋白指定位点插入ncaa；读取带beta-ncaa的多肽链；在benchmark（PDB ID：4JJE）多肽链某些位点进行ncaa突变。
 
@@ -188,7 +189,7 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 
 #### 周五
 * 目标
-修改4JJE.pdb为rosetta可读的pdb文件，将原有的序列3Pal-D-βhLeu-hLeu-D替换为D-βhLeu-hLeu-D（inhibitor 2)；并分别突变成D-βhLeu-3Pal-D（inhibitor 4)，D-βhLeu-V-D（inhibitor 8)，（3-OMe)Phe-βhLeu-hLeu-D（inhibitor 3)。
+修改4JJE.pdb为rosetta可读的pdb文件，将原有的序列3Pal-D-βhLeu-hLeu-D替换为D-βhLeu-hLeu-D（inhibitor 2)；并分别突变成D-βhLeu-3Pal-D（inhibitor 4)，D-βhLeu-V-D（inhibitor 8)，（3-OMe)Phe-βhLeu-hLeu-D（inhibitor 3)；重置github上的grad_project下的文件结构。
 * 方法
 1. 依照此前构建的gen_modified_pdb.py，修改4JJE.pdb为rosetta可读的pdb文件。（注：删除了4JJE.pdb中多肽N端的ACE，删除了C端多余的一个C原子）
 2. 运行relax，只允许多肽的残基构象发生变化（test_params.resfile），测试其构象是否合理（与原有的复合物结构相比，RMSD不会太大，一般小于1；打分合理，原子之间能保持原有的连接关系）。查阅Pyrosetta文档，找到针对不同分子的多种rmsd计算方法，如all_atom_rmsd，CA_rmsd，bb_rmsd等，这些方法分别对相应的原子做rmsd计算。这里选择pyrosetta.rosetta.core.scoring.all_atom_rmsd。
@@ -199,3 +200,11 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 2. 得到4JJE_clean_relax.pdb，all_atom_RMSD为1.22，并不理想；且从Pymol中看，relax后蛋白质结构的构象也发生了变化，这与test_params.resfile所定义的不同。
 3. 得到4JJE_clean_inhibitor_2.pdb。
 4. 得到其他几个inhibitor的pdb结构。
+5. 重置了github上的grad_project下的文件结构，各部分添加了README。（<https://github.com/phonez/grad_project>）
+
+------------------------------------------------
+
+## 第五周
+
+### 本周目标
+针对不同多肽抑制剂，完成对复合物的结构优化，描述打分结果与文献中IC50的关系。

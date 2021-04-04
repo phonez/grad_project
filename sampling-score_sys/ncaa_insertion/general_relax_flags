@@ -1,7 +1,0 @@
--nstruct 2
--relax:default_repeats 5
--out:path:pdb ./
--out:path:score ./
-
--relax:respect_resfile             
--packing:resfile ./BP5_resfile

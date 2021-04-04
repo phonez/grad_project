@@ -1,2 +1,0 @@
-complex_1 caspase3 D-B3L-V-D
-complex_2 caspase3 DEVD

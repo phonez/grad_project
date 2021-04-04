@@ -1,0 +1,260 @@
+##############################################################################################################
+#
+# Rosetta crash log. Please submit the contents of this file to http://crash.rosettacommons.org/
+# or use the script Rosetta/main/source/scripts/python/public/report_crashes.py
+#
+
+[START_CRASH_REPORT]
+[ROSETTA_VERSION]: 2021.07+release.c48be26
+[COMMIT_DATE]: 2021-02-22T05:58:26.229012
+[APPLICATION]: /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/source/bin/FlexPepDocking.static.linuxgccrelease
+[MODE]: Release
+[EXTRAS]: default
+[OS]: GNU/Linux
+[COMPILER]: GCC version "4.8.5 20150623 (Red Hat 4.8.5-39)"
+[STDLIB]: libstdc++ version 20150623
+[START_OPTIONS]
+ -in:file:s=input/complex_1_0001.pdb -out:nstruct=1 -out:file:scorefile=ppk.score.sc -out:path:pdb=input/ -out:path:score=output/ -packing:use_input_sc -packing:unboundrot=input/unbound.pdb -packing:ex1 -packing:ex2aro -flexPepDocking:flexpep_score_only -flexPepDocking:flexpep_prepack
+
+[END_OPTIONS]
+
+[START_BACKTRACE]: RAW_LIBC
+[0x637cec0]
+[0x637bc43]
+[0x6426dc6]
+[0x4efec83]
+[0x4efef18]
+[0x4eff025]
+[0x42f0a7e]
+[0x11f6f5f]
+[0x11f9209]
+[0x4191c1]
+[0x6b9e6d4]
+[0x6b9e951]
+[0x64d936]
+
+[END_BACKTRACE]
+
+[FILE]: src/core/io/pdb/build_pose_as_is.cc
+[LINE]: 168
+[START_MESSAGE]
+[ ERROR ] UtilityExitException
+ERROR: Cannot open file input/unbound.pdb
+
+
+
+[END_MESSAGE]
+[END_CRASH_REPORT]
+
+##############################################################################################################
+#
+# Rosetta crash log. Please submit the contents of this file to http://crash.rosettacommons.org/
+# or use the script Rosetta/main/source/scripts/python/public/report_crashes.py
+#
+
+[START_CRASH_REPORT]
+[ROSETTA_VERSION]: 2021.07+release.c48be26
+[COMMIT_DATE]: 2021-02-22T05:58:26.229012
+[APPLICATION]: /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/source/bin/FlexPepDocking.static.linuxgccrelease
+[MODE]: Release
+[EXTRAS]: default
+[OS]: GNU/Linux
+[COMPILER]: GCC version "4.8.5 20150623 (Red Hat 4.8.5-39)"
+[STDLIB]: libstdc++ version 20150623
+[START_OPTIONS]
+ -in:file:s=input/complex_1_ppk.pdb -out:nstruct=1 -out:file:scorefile=refine.score.sc -out:path:pdb=output/ -out:path:score=output/ -packing:use_input_sc -packing:unboundrot=input/caspase3.pdb -packing:ex1 -packing:ex2aro -flexPepDocking:lowres_preoptimize -flexPepDocking:pep_refine -flexPepDocking:flexpep_score_only
+
+[END_OPTIONS]
+
+[START_BACKTRACE]: RAW_LIBC
+[0x637cec0]
+[0x637bc43]
+[0x6426dc6]
+[0xa9beba]
+[0x5ef16c6]
+[0x5ef623f]
+[0x445b115]
+[0x445bf43]
+[0x1213c13]
+[0x1216016]
+[0x1205338]
+[0x3b474bc]
+[0x3b490e1]
+[0x3be5178]
+[0x419364]
+[0x6b9e6d4]
+[0x6b9e951]
+[0x64d936]
+
+[END_BACKTRACE]
+
+[FILE]: src/core/conformation/Residue.cc
+[LINE]: 204
+[START_MESSAGE]
+[ ERROR ] UtilityExitException
+ERROR: 
+
+
+
+[END_MESSAGE]
+[END_CRASH_REPORT]
+
+##############################################################################################################
+#
+# Rosetta crash log. Please submit the contents of this file to http://crash.rosettacommons.org/
+# or use the script Rosetta/main/source/scripts/python/public/report_crashes.py
+#
+
+[START_CRASH_REPORT]
+[ROSETTA_VERSION]: 2021.07+release.c48be26
+[COMMIT_DATE]: 2021-02-22T05:58:26.229012
+[APPLICATION]: /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/source/bin/FlexPepDocking.static.linuxgccrelease
+[MODE]: Release
+[EXTRAS]: default
+[OS]: GNU/Linux
+[COMPILER]: GCC version "4.8.5 20150623 (Red Hat 4.8.5-39)"
+[STDLIB]: libstdc++ version 20150623
+[START_OPTIONS]
+ -in:file:s=input/complex_1_ppk.pdb -out:nstruct=1 -out:file:scorefile=refine.score.sc -out:path:pdb=output/ -out:path:score=output/ -packing:use_input_sc -packing:unboundrot=input/caspase3.pdb -packing:ex1 -packing:ex2aro -packing:packer_palette:NCAA_expanded -flexPepDocking:lowres_preoptimize -flexPepDocking:pep_refine -flexPepDocking:flexpep_score_only
+
+[END_OPTIONS]
+
+[START_BACKTRACE]: RAW_LIBC
+[0x637cec0]
+[0x637bc43]
+[0x6426dc6]
+[0xa9beba]
+[0x5ef16c6]
+[0x5ef623f]
+[0x445b115]
+[0x445bf43]
+[0x1213c13]
+[0x1216016]
+[0x1205338]
+[0x3b474bc]
+[0x3b490e1]
+[0x3be5178]
+[0x419364]
+[0x6b9e6d4]
+[0x6b9e951]
+[0x64d936]
+
+[END_BACKTRACE]
+
+[FILE]: src/core/conformation/Residue.cc
+[LINE]: 204
+[START_MESSAGE]
+[ ERROR ] UtilityExitException
+ERROR: 
+
+
+
+[END_MESSAGE]
+[END_CRASH_REPORT]
+
+##############################################################################################################
+#
+# Rosetta crash log. Please submit the contents of this file to http://crash.rosettacommons.org/
+# or use the script Rosetta/main/source/scripts/python/public/report_crashes.py
+#
+
+[START_CRASH_REPORT]
+[ROSETTA_VERSION]: 2021.07+release.c48be26
+[COMMIT_DATE]: 2021-02-22T05:58:26.229012
+[APPLICATION]: /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/source/bin/FlexPepDocking.static.linuxgccrelease
+[MODE]: Release
+[EXTRAS]: default
+[OS]: GNU/Linux
+[COMPILER]: GCC version "4.8.5 20150623 (Red Hat 4.8.5-39)"
+[STDLIB]: libstdc++ version 20150623
+[START_OPTIONS]
+ -in:file:s=input/complex_1_ppk.pdb -out:nstruct=1 -out:file:scorefile=refine.score.sc -out:path:pdb=output/ -out:path:score=output/ -packing:use_input_sc -packing:unboundrot=input/caspase3.pdb -packing:ex1 -packing:ex2aro -packing:packer_palette:NCAA_expanded -flexPepDocking:lowres_preoptimize -flexPepDocking:pep_refine -flexPepDocking:flexpep_score_only
+
+[END_OPTIONS]
+
+[START_BACKTRACE]: RAW_LIBC
+[0x637cec0]
+[0x637bc43]
+[0x6426dc6]
+[0xa9beba]
+[0x5ef16c6]
+[0x5ef623f]
+[0x445b115]
+[0x445bf43]
+[0x1213c13]
+[0x1216016]
+[0x1205338]
+[0x3b474bc]
+[0x3b490e1]
+[0x3be5178]
+[0x419364]
+[0x6b9e6d4]
+[0x6b9e951]
+[0x64d936]
+
+[END_BACKTRACE]
+
+[FILE]: src/core/conformation/Residue.cc
+[LINE]: 204
+[START_MESSAGE]
+[ ERROR ] UtilityExitException
+ERROR: 
+
+
+
+[END_MESSAGE]
+[END_CRASH_REPORT]
+
+##############################################################################################################
+#
+# Rosetta crash log. Please submit the contents of this file to http://crash.rosettacommons.org/
+# or use the script Rosetta/main/source/scripts/python/public/report_crashes.py
+#
+
+[START_CRASH_REPORT]
+[ROSETTA_VERSION]: 2021.07+release.c48be26
+[COMMIT_DATE]: 2021-02-22T05:58:26.229012
+[APPLICATION]: /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/source/bin/FlexPepDocking.static.linuxgccrelease
+[MODE]: Release
+[EXTRAS]: default
+[OS]: GNU/Linux
+[COMPILER]: GCC version "4.8.5 20150623 (Red Hat 4.8.5-39)"
+[STDLIB]: libstdc++ version 20150623
+[START_OPTIONS]
+ -in:ignore_unrecognized_res -in:file:s=input/complex_1_ppk.pdb -out:nstruct=1 -out:file:scorefile=refine.score.sc -out:path:pdb=output/ -out:path:score=output/ -packing:use_input_sc -packing:unboundrot=input/caspase3.pdb -packing:ex1 -packing:ex2aro -packing:packer_palette:NCAA_expanded -flexPepDocking:lowres_preoptimize -flexPepDocking:pep_refine -flexPepDocking:flexpep_score_only
+
+[END_OPTIONS]
+
+[START_BACKTRACE]: RAW_LIBC
+[0x637cec0]
+[0x637bc43]
+[0x6426dc6]
+[0xa9beba]
+[0x5ef16c6]
+[0x5ef623f]
+[0x445b115]
+[0x445bf43]
+[0x1213c13]
+[0x1216016]
+[0x1205338]
+[0x3b474bc]
+[0x3b490e1]
+[0x3be5178]
+[0x419364]
+[0x6b9e6d4]
+[0x6b9e951]
+[0x64d936]
+
+[END_BACKTRACE]
+
+[FILE]: src/core/conformation/Residue.cc
+[LINE]: 204
+[START_MESSAGE]
+[ ERROR ] UtilityExitException
+ERROR: 
+
+
+
+[END_MESSAGE]
+[END_CRASH_REPORT]
+
