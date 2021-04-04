@@ -126,5 +126,76 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 1. 指定位点能够突变回Ile，但并未突变成BP5；运行过程中提示WARNING（including current in order to get at least 1 rotamer）
 2. 猜测是缺少BP5.rotlib的缘故，不能构建BP5的rotamers。
 
-### 下周目标
-在天然蛋白指定位点插入ncaa；在benchmark已知位点进行ncaa结构优化，测试构象是否合理；创建score-RMSD坐标图。
+------------------------------------------------
+
+## 第四周
+### 本周目标
+在天然蛋白指定位点插入ncaa；读取带beta-ncaa的多肽链；在benchmark（PDB ID：4JJE）多肽链某些位点进行ncaa突变。
+
+#### 周一
+* 目标
+在天然蛋白指定位点突变成ncaa。
+* 方法
+1. 猜测是缺少rotlib文件的缘故。创建一个五肽（AAAAA），在指定位点（如第二个氨基酸）突变成ornithine。rosetta中自带了ornithine的rotlib文件（$ROSETTA/main/database/rotamer/ncaa_rotlibs/ncaa_rotamer_libraries/alpha_amino_acid/C40.rotlib）。
+2. 猜测是rosetta不能读取resfile中指定的ncaa（即X[<full name>]），将full name改成XXX（名为XXX的ncaa应当不存在于rosetta库中）。
+* 结果
+1. 运行过程中提示相同的WARNING，且指定位点没有突变成ornithine。说明不是缺少rotlib文件的缘故。
+2. 运行过程中提示相同的WARNING，说明rosetta没有读取resfile中指定的ncaa。
+
+#### 周二
+* 目标
+在天然蛋白指定位点突变成ncaa；生成beta-3-homo-leucine的params文件；生成rosetta能读取的含有beta-ncaa的肽段。
+* 方法
+1. 经比较，beta-3-homo-leucine与rosetta数据库beta-peptide中B3L.params对应的beta氨基酸一致（二者的命名不同）。
+2. 将序列D-B3L-V-D通过pyrosetta中的dump_pdb()获得多肽链的pdb文件。
+* 结果
+1. 获得与caspase3结合的一条多肽链的pdb文件（位点突变的多肽链同理可以获得）。
+2. 突变问题尚未解决。
+
+#### 周三
+* 目标
+获取蛋白质-多肽复合物的pdb结构；考虑先采用从RosettaDock发展而来的FlexPepDock完成初步的对接（与Ligand Dock的比较？）。
+* 方法
+1. 在Pymol中，采用align的方法（align多肽D-B3L-V-D和蛋白质4JJE）将多肽放置在结合口袋附近。将caspase3.pdb（注：此处的caspase3蛋白质结构从蛋白质复合物4JJE.pdb截取而来，即结合配体的蛋白质结构）和D-B3L-V-D.pdb组合，导出complex_1.pdb。
+2. relax导出的complex_1.pdb。
+3. 参考（<https://onlinelibrary.wiley.com/doi/epdf/10.1002/prot.22716>，<https://doi.org/10.1371/journal.pone.0018934>，<https://doi.org/10.1371/journal.pcbi.1005905>），了解了FlexPepDock目前提供有三种方法（具体原理待更细致的研究）：refinement protocol，ab-initio protocol，PIPER-FlexPepDock。其适用性分别侧重于：PIPER-FlexPepDock侧重于多肽与蛋白质结合位点未知的情形；ab-initio protocol侧重于明确蛋白与多肽结合的大致区域，但缺少多肽骨架信息的情形；refinement protocol侧重于那些多肽与蛋白结合教接近正确解的模型（笛卡尔距离、phi/psi角）。由于采用align的方法放置多肽的位置，可以假设目前的模型接近正确解，于是选择采用refinement protocol。参照（<https://www.rosettacommons.org/demos/latest/public/refinement_of_protein_peptide_complex_using_FlexPepDock/README>），实现refinement protocol。具体分为两步：以relax后的蛋白质-多肽复合体为输入的蛋白质结构，进行prepack，得到complex_1.ppk.pdb；随后对prepack后的结构进行refine。
+4. 重复方法1-3，将多肽序列换成DEVD。
+* 结果
+1. 得到complex_1.pdb。（注：保留了ANISOU和第17列的可替位置标识符）
+2. relax过程中多次报错：“core.optimization.LineMinimizer: [ ERROR ] Inaccurate G! step= 7.45058e-09 Deriv= -1.29369 Finite Diff= 3.37687e+08”。查阅资料（<https://www.rosettacommons.org/node/11137>），了解：能量最小化过程是沿着构象势能面的梯度“向下”进行的，这一报错意味着在这一过程中能量反而升高，存在局部的、奇怪的结构。虽然不致影响最后的打分结果，但是会增加计算时长，降低采样效率。
+3. prepack后的蛋白质的打分升高，这可能是由于在dock时采用的打分函数不同；refine过程中报错（core.conformation.Residue: [ ERROR ] New Residue cannot be aligned with template Residue, because the numbers of main-chain atoms differ.），猜测是不能兼容beta-aa的缘故（即B3L）。
+4. 程序正常结束。验证了结果3中的结论，针对FlexPepDock Refinement暂时没有找到兼容beta-aa的解决方案（是否兼容ncaa？）。
+
+#### 周四
+* 目标
+尝试解决FlexPepDock Refinement对beta-aa的兼容性问题；考虑采用DougsDockDesignMinimizeProtocol或Ligand Dock完成初步对接。
+* 方法
+1. 查阅（<http://flexpepdock.furmanlab.cs.huji.ac.il/usage.php>），了解：输入pdb文件中不能含有HETATM。修改prepack后的输入文件。
+2. DougsDockDesignMinimizeProtocol是Douglas等人发展的用于重新设计蛋白多肽结合界面、评估ncaa突变对蛋白-多肽结合能力的影响的方法（doi:10.1371/journal.pone.0032637.g001）。该方法包含两层循环，外循环控制生成结构的数量；内循环控制设计流程，包括：
+	- 扰动阶段：每次随机选择如下一种扰动，紧随着进行粗粒化的侧链优化（RotamerTrials？）。
+		- 在结合口袋处，将多肽视为刚体，对整体施加旋转的和平移的位置扰动。
+		- 对于多肽的所有残基，施加phi角和psi角的骨架扰动（smallMove和shearMove）。
+		- 在结合口袋附近的、位于蛋白质上的残基，施加phi角和psi角的骨架扰动。
+	- 设计阶段：在若干次扰动后，进行更细致的侧链优化（PackRotamers），随后
+		- 主链、侧链二面角的能量最小化。
+		- 多肽与蛋白质之间的能量最小化（jump between the peptide and protein?）。
+参照（<https://new.rosettacommons.org/docs/latest/application_documentation/design/doug-dock-design-min-mod2-cal-cal>）。暂不清楚Rosetta如何定义beta-aa的psi角和phi角（可能需要修改Protocol，将其单独隔离，不参与多肽的骨架扰动？），猜测运行过程可能报错，考虑先设定外循环生成结构数量-nstruct为1，内循环次数-inner_num为1，每次设计需经历的扰动次数-pert_num为25。
+3. 将2中内循环次数和每次设计需经历的扰动次数设置为默认值100。
+* 结果
+1. refine过程中报告相同的错误。考虑采用DougsDockDesignMinimizeProtocol方法进行测试。
+2. 程序正常结束，但是ENERGY_DIFF报告为正值（约0.5），对比输出的复合物结构与输入的复合物结构，差异不大（RMSD<0.01），猜测是内循环次数和扰动次数过少，采样不充分导致。
+3. 程序正常结束，ENERGY_DIFF报告为负值（-4.034），对比输出和输入（采用Pymol的align方法），RMSD为0.014；对比输出和输入中多肽的结构，RMSD为1.217。Pymol中的比对结果显示，相较于初始结构，多肽整体以平移地方式远离了结合口袋，但是骨架变动似乎并不大。对结果有如下三种可能的解释：接近正确结构；需要更多的尝试以接近正确结构；目前的尝试方法从原理上不能很好地处理beta-aa，因此难以达到正确结构。因此需要一种方法以检查DougsDockDesignMinimizeProtocol对于此例是否可行的。
+
+#### 周五
+* 目标
+修改4JJE.pdb为rosetta可读的pdb文件，将原有的序列3Pal-D-βhLeu-hLeu-D替换为D-βhLeu-hLeu-D（inhibitor 2)；并分别突变成D-βhLeu-3Pal-D（inhibitor 4)，D-βhLeu-V-D（inhibitor 8)，（3-OMe)Phe-βhLeu-hLeu-D（inhibitor 3)。
+* 方法
+1. 依照此前构建的gen_modified_pdb.py，修改4JJE.pdb为rosetta可读的pdb文件。（注：删除了4JJE.pdb中多肽N端的ACE，删除了C端多余的一个C原子）
+2. 运行relax，只允许多肽的残基构象发生变化（test_params.resfile），测试其构象是否合理（与原有的复合物结构相比，RMSD不会太大，一般小于1；打分合理，原子之间能保持原有的连接关系）。查阅Pyrosetta文档，找到针对不同分子的多种rmsd计算方法，如all_atom_rmsd，CA_rmsd，bb_rmsd等，这些方法分别对相应的原子做rmsd计算。这里选择pyrosetta.rosetta.core.scoring.all_atom_rmsd。
+3. 假定D-βhLeu-hLeu-D与原有序列3Pal-D-βhLeu-hLeu-D后四个氨基酸的骨架位置、侧链构象均相近，为了得到含有D-βhLeu-hLeu-D的pdb文件，直接在原pdb文件中删除3Pal氨基酸对应的字段（或者使用Mover中的CutOutDomain?）。
+4. 由于目前暂时不能从resfile中读取ncaa（可能是新版本的rosettta和pyrosetta的存在一些问题），采用Mover中的MutateResidue解决此问题。
+* 结果
+1. 得到4JJE_clean.pdb。
+2. 得到4JJE_clean_relax.pdb，all_atom_RMSD为1.22，并不理想；且从Pymol中看，relax后蛋白质结构的构象也发生了变化，这与test_params.resfile所定义的不同。
+3. 得到4JJE_clean_inhibitor_2.pdb。
+4. 得到其他几个inhibitor的pdb结构。

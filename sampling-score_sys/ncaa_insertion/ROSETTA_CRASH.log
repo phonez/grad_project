@@ -1,0 +1,56 @@
+##############################################################################################################
+#
+# Rosetta crash log. Please submit the contents of this file to http://crash.rosettacommons.org/
+# or use the script Rosetta/main/source/scripts/python/public/report_crashes.py
+#
+
+[START_CRASH_REPORT]
+[ROSETTA_VERSION]: 2021.07+release.c48be26
+[COMMIT_DATE]: 2021-02-22T05:58:26.229012
+[APPLICATION]: /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/source/bin/rosetta_scripts.static.linuxgccrelease
+[MODE]: Release
+[EXTRAS]: default
+[OS]: GNU/Linux
+[COMPILER]: GCC version "4.8.5 20150623 (Red Hat 4.8.5-39)"
+[STDLIB]: libstdc++ version 20150623
+[START_OPTIONS]
+ -in:file:s=./AAAAA.pdb -in:file:extra_res_fa=./23P..params -out:overwrite -parser:protocol=./BP5.xml
+
+[END_OPTIONS]
+
+[START_BACKTRACE]: RAW_LIBC
+[0x637eec0]
+[0x637dc43]
+[0x6428dc6]
+[0x5d5178f]
+[0x5cbee93]
+[0x5ca84d5]
+[0x5ca8f17]
+[0x5ca6708]
+[0x5ca6998]
+[0x5ea2d8e]
+[0x48f164d]
+[0x3c392e0]
+[0x3c39486]
+[0x3b6c731]
+[0x3b48f3a]
+[0x3b4b0e1]
+[0x3be7178]
+[0x41949e]
+[0x6ba06d4]
+[0x6ba0951]
+[0x64dbd6]
+
+[END_BACKTRACE]
+
+[FILE]: src/core/chemical/residue_io.cc
+[LINE]: 144
+[START_MESSAGE]
+[ ERROR ] UtilityExitException
+ERROR: Cannot find file './23P..params or /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/database/chemical/residue_type_sets/fa_standard/residue_types/./23P..params'
+
+
+
+[END_MESSAGE]
+[END_CRASH_REPORT]
+

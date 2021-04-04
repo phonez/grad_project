@@ -4,4 +4,4 @@
 -out:path:score ./
 
 -relax:respect_resfile             
--packing:resfile ./4iww.resfile
+-packing:resfile ./BP5_resfile

@@ -12,6 +12,7 @@ import sys
 
 # generate ncaa.pdb file from params file
 # ncaa named with three characters
+# what if this ncaa is already in rosetta database (to be updated...)
 def gen_ncaa_pdb_from_rosetta(ncaa): 
     params_file = params_filedir + ncaa + ".params"
     rosetta_option = "-in:file:extra_res_fa " + params_file

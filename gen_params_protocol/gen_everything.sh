@@ -1,6 +1,5 @@
 #!/bin/bash
 
-:<<BLOCK
 echo "Generating gjf files..."
 python3 /home/zhangf/grad_project/gen_params_protocol/gen_gjf.py
 if [ $? == 0 ]
@@ -8,17 +7,17 @@ then
     echo "Done."
 else
     echo "Failed in some cases."
+	exit 1
 fi
 
 echo "Running gaussian..."
-# bash gen_log.sh
 if [ $? == 0 ]
 then
     echo "Done."
 else
     echo "Failed in some cases."
+	exit 1
 fi
-BLOCK
 
 echo "Generating mol files..."
 bash /home/zhangf/grad_project/gen_params_protocol/gen_mol.sh

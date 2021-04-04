@@ -1,0 +1,57 @@
+##############################################################################################################
+#
+# Rosetta crash log. Please submit the contents of this file to http://crash.rosettacommons.org/
+# or use the script Rosetta/main/source/scripts/python/public/report_crashes.py
+#
+
+[START_CRASH_REPORT]
+[ROSETTA_VERSION]: 2021.07+release.c48be26
+[COMMIT_DATE]: 2021-02-22T05:58:26.229012
+[APPLICATION]: /home/zhangf/program/rosetta_bin_linux_2021.07.61567_bundle/main/source/bin/doug_dock_design_min_mod2_cal_cal.static.linuxgccrelease
+[MODE]: Release
+[EXTRAS]: default
+[OS]: GNU/Linux
+[COMPILER]: GCC version "4.8.5 20150623 (Red Hat 4.8.5-39)"
+[STDLIB]: libstdc++ version 20150623
+[START_OPTIONS]
+ -dddm::pert_num=25 -dddm::inner_num=1 -dddm::ia_ener=100 -in:path:database=$ROSETTA/main/database/ -in:file:s=/home/zhangf/grad_project/noncanonical_peptide/DougsDockDesignMinimizeProtocol/input/complex_1.pdb -out:nstruct=1 -packing:use_input_sc
+
+[END_OPTIONS]
+
+[START_BACKTRACE]: RAW_LIBC
+[0x63850c0]
+[0x6383e43]
+[0x642efc6]
+[0x5cb92ba]
+[0x5cc4eca]
+[0x5cae6d5]
+[0x5caf117]
+[0x5cac908]
+[0x5cacb98]
+[0x5ea8f8e]
+[0x48f784d]
+[0x3c3f4e0]
+[0x3c3f686]
+[0x3b72931]
+[0x3b4f13a]
+[0x3b512e1]
+[0x3bed378]
+[0x41ad4a]
+[0x6ba68d4]
+[0x6ba6b51]
+[0x64f366]
+
+[END_BACKTRACE]
+
+[FILE]: src/core/chemical/GlobalResidueTypeSet.cc
+[LINE]: 149
+[START_MESSAGE]
+[ ERROR ] UtilityExitException
+ERROR: Unable to open file: $ROSETTA/main/database/chemical/residue_type_sets/fa_standard/residue_types.txt
+
+
+
+
+[END_MESSAGE]
+[END_CRASH_REPORT]
+

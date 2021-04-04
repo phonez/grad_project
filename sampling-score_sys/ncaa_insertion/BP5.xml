@@ -1,0 +1,28 @@
+<ROSETTASCRIPTS>               
+    <SCOREFXNS>
+        <ScoreFunction name="r15" weights="ref2015" />
+    </SCOREFXNS>
+
+    <TASKOPERATIONS>
+        <InitializeFromCommandline name="init" />
+        <RestrictToRepacking name="repack" />
+        <ReadResfile name="mutatable" filename="BP5.resfile" />
+    </TASKOPERATIONS>
+
+    <FILTERS>
+    </FILTERS>
+
+    <MOVERS>
+        <PackRotamersMover name="mutate" task_operations="mutatable" scorefxn="r15"/>
+    </MOVERS>
+
+    <APPLY_TO_POSE>
+    </APPLY_TO_POSE>
+
+    <PROTOCOLS>
+        <Add mover="mutate" />
+    </PROTOCOLS>
+
+    <OUTPUT scorefxn="r15" />
+
+</ROSETTASCRIPTS>
