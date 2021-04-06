@@ -1,6 +1,5 @@
-$ROSETTA_BIN/relax.static.linuxgccrelease -s input/4JJE_clean_inhibitor_2.pdb @relax_flags
+$ROSETTA_BIN/relax.static.linuxgccrelease -s input/4JJE_clean_inhibitor_8.pdb @relax_flags
 
-$ROSETTA_BIN/rosetta_scripts.static.linuxgccrelease -s ./input/4JJE_clean_inhibitor_2_opt.pdb -parser:protocol ./optimize.xml -extra_res_fa ~/grad_project/ncaa_database/params/HLX.params -out:path:pdb output -out:path:score output -in:file:native ./input/4JJE_clean_inhibitor_2_opt.pdb 
+$ROSETTA_BIN/rosetta_scripts.static.linuxgccrelease -in:file:native ./input/4JJE_clean_inhibitor_8_opt.pdb -s ./input/4JJE_clean_inhibitor_8_opt.pdb -parser:protocol ./optimize.xml -extra_res_fa ~/grad_project/ncaa_database/params/HLX.params ~/grad_project/ncaa_database/params/A90.params ~/grad_project/ncaa_database/params/1MH.params -out:path:pdb output -out:path:score output
 
-# out:file:score_only XXX.sc
 

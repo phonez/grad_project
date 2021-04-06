@@ -1,9 +1,10 @@
 -relax:constrain_relax_to_start_coords
 
 -extra_res_fa /home/zhangf/grad_project/ncaa_database/params/HLX.params
+-extra_res_fa /home/zhangf/grad_project/ncaa_database/params/A90.params
+-extra_res_fa /home/zhangf/grad_project/ncaa_database/params/1MH.params
 
 -out:suffix _opt
 -out:no_nstruct_label
 -out:path:pdb input
 -out:path:score output
--out:sf 4JJE_clean_inhibitor_2_opt.sc

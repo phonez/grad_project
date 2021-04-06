@@ -1,6 +1,5 @@
 <ROSETTASCRIPTS>               
     <SCOREFXNS>
-        <ScoreFunction name="r15" weights="ref2015" />
     </SCOREFXNS>
 
     <TASKOPERATIONS>
@@ -10,16 +9,18 @@
     </FILTERS>
 
     <MOVERS>
-        <MutateResidue name="mutate" target="4B" new_res="1MH" />
+        MutateResidue name="mutant_3" target="2B" new_res="A90" />
+        MutateResidue name="mutant_4" target="4B" new_res="1MH" />
+        <MutateResidue name="mutant_8" target="4B" new_res="VAL" />
     </MOVERS>
 
     <APPLY_TO_POSE>
     </APPLY_TO_POSE>
 
     <PROTOCOLS>
-        <Add mover="mutate" />
+        Add mover="mutant_3" />
+        Add mover="mutant_4" />
+        <Add mover="mutant_8" />
     </PROTOCOLS>
-
-    <OUTPUT scorefxn="r15" />
 
 </ROSETTASCRIPTS>

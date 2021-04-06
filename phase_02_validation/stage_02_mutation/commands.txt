@@ -1,1 +1,1 @@
-$ROSETTA_BIN/rosetta_scripts.static.linuxgccrelease -s ./input/4JJE_clean_inhibitor_2.pdb -parser:protocol ./mutate.xml -extra_res_fa ~/grad_project/ncaa_database/params/1MH.params ~/grad_project/ncaa_database/params/HLX.params
+$ROSETTA_BIN/rosetta_scripts.static.linuxgccrelease -s ./input/4JJE_clean_inhibitor_2.pdb -parser:protocol ./mutate.xml -extra_res_fa ~/grad_project/ncaa_database/params/1MH.params ~/grad_project/ncaa_database/params/HLX.params ~/grad_project/ncaa_database/params/A90.params -out:path:pdb output

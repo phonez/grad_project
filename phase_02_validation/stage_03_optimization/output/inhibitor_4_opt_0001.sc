@@ -1,0 +1,3 @@
+SEQUENCE: 
+SCORE: total_score dslf_fa13    fa_atr    fa_dun   fa_elec fa_intra_rep fa_intra_sol_xover4              fa_rep              fa_sol hbond_bb_sc hbond_lr_bb    hbond_sc hbond_sr_bb lk_ball_wtd       omega     p_aa_pp pro_close rama_prepro         ref        rmsd yhh_planarity description 
+SCORE:    -685.974     0.000 -1459.594   286.130  -470.971        2.815              51.210             212.705             926.532     -49.747     -63.445     -47.985     -72.045     -31.279      26.254     -52.387     0.509     -14.407      69.600       0.534         0.129 4JJE_clean_inhibitor_4_opt_0001
