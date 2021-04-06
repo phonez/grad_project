@@ -4,16 +4,13 @@
     </SCOREFXNS>
 
     <TASKOPERATIONS>
-        <InitializeFromCommandline name="init" />
-        <RestrictToRepacking name="repack" />
-        <ReadResfile name="mutatable" filename="BP5.resfile" />
     </TASKOPERATIONS>
 
     <FILTERS>
     </FILTERS>
 
     <MOVERS>
-        <PackRotamersMover name="mutate" task_operations="mutatable" scorefxn="r15"/>
+        <MutateResidue name="mutate" target="4B" new_res="1MH" />
     </MOVERS>
 
     <APPLY_TO_POSE>

@@ -200,7 +200,7 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 2. 得到4JJE_clean_relax.pdb，all_atom_RMSD为1.22，并不理想；且从Pymol中看，relax后蛋白质结构的构象也发生了变化，这与test_params.resfile所定义的不同。
 3. 得到4JJE_clean_inhibitor_2.pdb。
 4. 得到其他几个inhibitor的pdb结构。
-5. 重置了github上的grad_project下的文件结构，各部分添加了README。（<https://github.com/phonez/grad_project>）
+5. 重置了github上的grad_project下的文件结构，各部分添加了README.md，commands.txt等。（<https://github.com/phonez/grad_project>）
 
 ------------------------------------------------
 
@@ -208,3 +208,17 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 
 ### 本周目标
 针对不同多肽抑制剂，完成对复合物的结构优化，描述打分结果与文献中IC50的关系。
+
+#### 周一
+* 目标
+在限制坐标的条件下，完成蛋白-多肽的结构优化；调整自由度，突变多肽上的氨基酸，完成蛋白-多肽的结构优化。
+* 方法
+1. 为初始结构（4JJE_clean_inhibitor_2.pdb）骨架重原子添加坐标限制势，使其不偏离初始输入的结构（-relax:constrain_relax_to_start_coords），调用relax方法做结构优化。这是由于：在Rosetta的评分体系中，即使是天然蛋白也会因为存在很多原子间的空间冲突（clash）导致评分急剧上升，被判定为结构不合理。如果不做结构优化，蛋白质本身的不合理结构而非抑制剂与蛋白结合的强度将会成为评分的主导因素，将无法通过打分的差异准确判断抑制剂与蛋白的结合能力的差异。
+2. 关闭蛋白质骨架、侧链自由度，关闭多肽beta-aa骨架自由度（假定这些inhibitor中beta-aa的骨架相较于4JJE.pdb变动不大），进一步优化4JJE_opt_inhibitor_2的构象，同时给出多肽抑制剂的RMSD值（rmsd_all_heavy）。
+* 结果
+1. 获得4JJE_clean_inhibitor_2_opt.pdb，并将其视为天然结构以计算RMSD。Pymol的比对显示，优化后的结构相较于原始结构有一定偏离，在Pyrosetta中计算all_atom_rmsd，结果为1.30。
+2. 获得4JJE_clean_inhibitor_2_opt_0001.pdb，RMSD为0.09，但是打分升高（从-775升高至-714）。
+
+#### 周二
+* 目标
+对多肽上的氨基酸做ncaa突变，重复以上步骤，得到其它inhibitor的结果；对比后再调整结构优化的限制条件。

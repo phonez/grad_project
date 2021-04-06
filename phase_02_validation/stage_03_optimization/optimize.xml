@@ -1,0 +1,41 @@
+<ROSETTASCRIPTS>               
+    <SCOREFXNS>
+        <ScoreFunction name="r15" weights="ref2015" />
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        <ResidueName name="beta_aa" residue_names="B3L" />
+        <Chain name="chain_B" chains="B" />       
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+        <InitializeFromCommandline name="init" />
+        <IncludeCurrent name="cur" />
+    </TASKOPERATIONS>
+
+    <SIMPLE_METRICS>
+        <RMSDMetric name="rmsd" rmsd_type="rmsd_all_heavy" residue_selector="chain_B" use_native="1" />
+    </SIMPLE_METRICS>
+
+    <FILTERS>
+    </FILTERS>
+
+    <MOVERS>
+        <FastRelax name="fr" scorefxn="r15" task_operations="init,cur" >
+            <MoveMap name="disable_move" bb="0" chi="0" >
+                <ResidueSelector selector="chain_B" bb="1" chi="1" />
+                <ResidueSelector selector="beta_aa" bb="0" chi="1" />
+            </MoveMap>
+        </FastRelax>
+    </MOVERS>
+
+    <APPLY_TO_POSE>
+    </APPLY_TO_POSE>
+
+    <PROTOCOLS>
+        <Add mover="fr" />
+        <Add metrics="rmsd" />
+    </PROTOCOLS>
+
+    <OUTPUT scorefxn="r15"/>
+</ROSETTASCRIPTS>
