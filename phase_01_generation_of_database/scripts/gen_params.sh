@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# modified mol file --> params file
+# Convert modified mol file to params file.
 
-modified_mol_filedir="/home/zhangf/grad_project/pipeline/modified_mol/"
-params_filedir="/home/zhangf/grad_project/pipeline/params/"
-
-cd ${modified_mol_filedir}
+cd $(dirname $0)
+cd ..
+modified_mol_path=$PWD"/out/modified_mol/"
+params_path=$PWD"/out/params/"
+cd ${modified_mol_path}
 
 # name the ncaa with three characters previously
-for molfile in *.mol
+for modified_mol_file in *.mol
 do
-logfile=${params_filedir}${molfile//mol/log}
-python2 /home/zhangf/grad_project/gen_params_protocol/molfile_to_params_polymer.py\
- --clobber --polymer --no-pdb --name ${molfile//.mol} -k ${molfile//mol/kin} ${molfile} > ${logfile}
+log_file=${params_path}${modified_mol_file//mol/log}
+python2 /home/zhangf/grad_project/gen_params_protocol/modified_mol_file_to_params_polymer.py\
+ --clobber --polymer --no-pdb --name ${modified_mol_file//.mol} ${modified_mol_file} > ${log_file}
 
-
-mv ${molfile//mol/kin} ${params_filedir}
-mv ${molfile//mol/params} ${params_filedir} 
+mv ${modified_mol_file//mol/params} ${params_path}
+rm ${log_file}
 done

@@ -1,13 +1,15 @@
 '''
-initial structure mol2 file --> gjf file 
+Convert mol2 file (initial structure) to gjf file (gaussian input file).
 '''
 
-mol2_filedir = "/home/zhangf/grad_project/pipeline/mol2/"
-gjf_filedir = "/home/zhangf/grad_project/pipeline/gjf/"
-chk_filedir = "/home/zhangf/grad_project/pipeline/chk/"
+import sys
+import os
+
+mol2_path = os.path.dirname(sys.path[0]) + "/input/mol2/"
+gjf_path = os.path.dirname(sys.path[0]) + "/output/gjf/"
+chk_path = os.path.dirname(sys.path[0]) + "/output/chk/"
 
 from rdkit import Chem
-import os
 
 def get_total_charge(mol):
     total_charge = 0
@@ -33,15 +35,15 @@ def get_backbone_atoms(mol):
     return backbone_atoms
 
 def get_phi_atoms_from_backbone(backbone_atoms):
-    return (backbone_atoms[5], backbone_atoms[4], backbone_atoms[3], backbone_atoms[1]) # index starts from 0!?
+    return (backbone_atoms[5], backbone_atoms[4], backbone_atoms[3], backbone_atoms[1]) # index starts from 0
 
 def get_psi_atoms_from_backbone(backbone_atoms):
     return (backbone_atoms[3], backbone_atoms[4], backbone_atoms[5], backbone_atoms[7])
 
-def gen_gjf_file(gjf_filedir, chk_filedir, gjf_filename, mol):
+def gen_gjf_file(gjf_path, chk_path, gjf_name, mol):
     
-    gjf_file = gjf_filedir + gjf_filename + ".gjf"
-    chk_file = chk_filedir + gjf_filename + ".chk"
+    gjf_file = gjf_path + gjf_name + ".gjf"
+    chk_file = chk_path + gjf_name + ".chk"
     
     with open(gjf_file, "w") as f:
         f.write("%%Chk=%s\n" % (chk_file))
@@ -57,6 +59,7 @@ def gen_gjf_file(gjf_filedir, chk_filedir, gjf_filename, mol):
             f.write("%s    %f  %f  %f\n" % (atom.GetSymbol(), x, y, z))
         '''
         # for restricted opitimization: freeze phi and psi
+        # however, this syntax is not supported after g09D01
         
         f.write("\n")
         phi_atoms = get_phi_atoms_from_backbone(get_backbone_atoms(mol))
@@ -67,15 +70,15 @@ def gen_gjf_file(gjf_filedir, chk_filedir, gjf_filename, mol):
         f.write("\n")
         f.write("\n")
 
-os.chdir(mol2_filedir)
-mol2_filelist = []
+os.chdir(mol2_path)
+mol2_list = []
 
-for root, dirs, files in os.walk(mol2_filedir):
-    for file in files:
-        if os.path.splitext(file)[1] == ".mol2":
-            mol2_filelist.append(file)
+for root, dirs, files in os.walk(mol2_path):
+    for mol2_file in files:
+        if os.path.splitext(mol2_file)[1] == ".mol2": # we should name the ncaa with three characters since now!?
+            mol2_list.append(mol2_file)
 
-for mol2_file in mol2_filelist:
-    gjf_filename = os.path.splitext(mol2_file)[0]
+for mol2_file in mol2_list:
+    gjf_name = os.path.splitext(mol2_file)[0]
     mol = Chem.MolFromMol2File(mol2_file, removeHs = False)
-    gen_gjf_file(gjf_filedir, chk_filedir, gjf_filename, mol)
+    gen_gjf(gjf_path, chk_path, gjf_name, mol)

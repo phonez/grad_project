@@ -1,13 +1,15 @@
 '''
-mol file --> modified mol file (to be updated...)
+Convert mol file to modified mol file. (to be updated...)
 '''
 
-mol2_filedir = "/home/zhangf/grad_project/pipeline/mol2/"
-mol_filedir = "/home/zhangf/grad_project/pipeline/mol/"
-modified_mol_filedir = "/home/zhangf/grad_project/pipeline/modified_mol/"
+import sys
+import os
+
+mol2_path = os.path.dirname(sys.path[0]) + "/input/mol2/"
+mol_path = os.path.dirname(sys.path[0]) + "/output/mol/"
+modified_mol_path = os.path.dirname(sys.path[0]) +"/output/modified_mol/"
 
 from rdkit import Chem
-import os
 
 def get_total_charge(mol):
     total_charge = 0
@@ -16,7 +18,7 @@ def get_total_charge(mol):
     return total_charge
 
 def get_backbone_atoms(mol):
-    backbone = Chem.MolFromSmiles("CC(=O)NCC(=O)NC")  # backbone atoms of dipeptide displayed as ordered
+    backbone = Chem.MolFromSmiles("CC(=O)NCC(=O)NC")  # backbone atoms of mol displayed as ordered
     backbone_atoms = mol.GetSubstructMatch(backbone)
     num_Hs_in_ACE = 0
     num_Hs_in_NME = 0
@@ -38,7 +40,7 @@ def get_carbon_in_ACE(backbone_atoms): # POLY_LOWER ATOM in modified mol file
 def get_nitrogen_in_NME(backbone_atoms): # POLY_UPPER ATOM in modified mol file
     return backbone_atoms[7] + 1
 
-def get_capping_atoms(mol): # without POLY_LOWER ATOM and POLY_UPPER ATOM in ACE and NME
+def get_capping_atoms(mol): # except POLY_LOWER ATOM and POLY_UPPER ATOM in ACE and NME
     backbone_atoms = get_backbone_atoms(mol)
     capping_atoms = set()
     capping_atoms.add(backbone_atoms[0] + 1)
@@ -60,21 +62,21 @@ def get_capping_atoms(mol): # without POLY_LOWER ATOM and POLY_UPPER ATOM in ACE
 def is_aromatic(mol):
     pass
 
-os.chdir(mol_filedir)
-mol_filelist = []
+os.chdir(mol_path)
+mol_list = []
 
-for root, dirs, files in os.walk(mol_filedir):
-    for file in files:
-        if os.path.splitext(file)[1] == ".mol":
-            mol_filelist.append(file)
+for root, dirs, files in os.walk(mol_path):
+    for mol_file in files:
+        if os.path.splitext(mol_file)[1] == ".mol":
+            mol_list.append(mol_file)
 
-for file in mol_filelist:
-    filename = os.path.splitext(file)[0]
-    mol2_flie = mol2_filedir + filename + ".mol2"  
-    mol_file = mol_filedir + filename + ".mol"
-    modified_mol_file = modified_mol_filedir + filename + ".mol"
+for mol_file in mol_list:
+    mol_name = os.path.splitext(mol_file)[0]
+    mol2_file = mol2_path + mol_name + ".mol2"  
+    mol_file = mol_path + mol_name + ".mol"
+    modified_mol_file = modified_mol_path + mol_name + ".mol"
     
-    mol = Chem.MolFromMol2File(mol2_flie, removeHs = False)
+    mol = Chem.MolFromMol2File(mol2_file, removeHs = False)
     backbone_atoms = get_backbone_atoms(mol)
     
     ROOT = backbone_atoms[3] + 1
@@ -86,7 +88,7 @@ for file in mol_filelist:
     POLY_UPPER = get_nitrogen_in_NME(backbone_atoms)
     POLY_LOWER = get_carbon_in_ACE(backbone_atoms)
     POLY_CHARGE = get_total_charge(mol)
-    POLY_PROPERTIES = ["PROTEIN"] # to be updated ...
+    POLY_PROPERTIES = ["PROTEIN"] # to be updated...
     
     with open(mol_file, "r") as f_read, open(modified_mol_file, "w") as f:
         read_lines = f_read.readlines()

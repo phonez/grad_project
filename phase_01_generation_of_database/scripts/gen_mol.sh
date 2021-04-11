@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# gaussian output log file --> mol file
+# Convert gaussian output log file to mol file.
 
-log_filedir="/home/zhangf/grad_project/pipeline/log/"
-mol_filedir="/home/zhangf/grad_project/pipeline/mol/"
+cd $(dirname $0)
+cd ..
+log_path=$PWD"/out/log/"
+mol_path=$PWD"/out/mol/"
+cd ${log_path}
 
-cd ${log_filedir}
-
-for logfile in *.log
+for log_file in *.log
 do
-obabel -i g09 ${logfile} -o mol -O ${logfile//log/mol}
-mv ${logfile//log/mol} ${mol_filedir}
+obabel -i g09 ${log_file} -o mol -O ${log_file//log/mol}
+mv ${log_file//log/mol} ${mol_path}
 done
   
