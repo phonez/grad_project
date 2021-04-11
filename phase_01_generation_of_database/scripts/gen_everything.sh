@@ -6,7 +6,7 @@
 cd $(dirname $0)
 
 echo "Generating gjf files..."
-python3 ./gen_gjf.py
+python3 ./step_00_gen_gjf.py
 if [ $? == 0 ]
 then
     echo "Done."
@@ -25,7 +25,7 @@ else
 fi
 
 echo "Generating mol files..."
-bash ./gen_mol.sh
+bash ./step_02_gen_mol.sh
 if [ $? == 0 ]
 then
     echo "Done."
@@ -35,7 +35,7 @@ else
 fi
 
 echo "Generating modified mol files..."
-python3 ./gen_modified_mol.py
+python3 ./step_03_gen_modified_mol.py
 if [ $? == 0 ]
 then
     echo "Done."
@@ -45,7 +45,7 @@ else
 fi
 
 echo "Generating params files..."
-bash ./gen_params.sh
+bash ./step_04_gen_params.sh
 if [ $? == 0 ]
 then
     echo "Done."
@@ -55,7 +55,7 @@ else
 fi
 
 echo "Checking chis in params files..."
-bash ./check_chi.sh
+bash ./step_05_check_chi.sh
 if [ $? == 0 ]
 then
     echo "Done."

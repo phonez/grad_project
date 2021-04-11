@@ -3,7 +3,6 @@ Generate input files (.in) for MakeRotLib application. (to be updated...)
 This script is authored by wfz.
 '''
 
-
 def gen_rotlib_in(ncaa, num_chi, sp2_chi):
 
     phi_range = psi_range = range(-180,180,10)
