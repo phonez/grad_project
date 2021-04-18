@@ -5,7 +5,8 @@
 
 cd $(dirname $0)
 cd ..
-gjf_path=$PWD"/out/gjf/"
+gjf_path=$PWD"/output/gjf/"
+log_path=$PWD"/output/log/"
 cd ${gjf_path}
 
 cur=0
@@ -14,7 +15,8 @@ for gjf_file in *.gjf
 do
 ((cur++))
 echo Running ${gjf_file} ... \($cur of $total\)
-g09 < ${gjf_file} > ${gjf_file//gjf/log}
+time g09 < ${gjf_file} > ${gjf_file//gjf/log}
+mv ${gjf_file//gjf/log} ${log_path}
 echo ${gjf_file} has finished
 done
 

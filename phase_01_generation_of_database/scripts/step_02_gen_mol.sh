@@ -4,8 +4,8 @@
 
 cd $(dirname $0)
 cd ..
-log_path=$PWD"/out/log/"
-mol_path=$PWD"/out/mol/"
+log_path=$PWD"/output/log/"
+mol_path=$PWD"/output/mol/"
 cd ${log_path}
 
 for log_file in *.log

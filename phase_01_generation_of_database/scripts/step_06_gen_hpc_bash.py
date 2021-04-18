@@ -7,6 +7,10 @@ make_rot_lib_app = '/lustre1/chuwang_pkuhpc/rosetta/rosetta_src_2019.47.61047_bu
 
 import os, sys
 
+params_path = os.path.dirname(sys.path[0]) + "/output/params/"
+in_path = os.path.dirname(sys.path[0]) + "/output/in/" 
+bash_path = os.path.dirname(sys.path[0]) + "/output/bash/" # hpc_bash files
+
 def hpc_sh(J, N, node, o, e, cmd):
     assert type(cmd) == str
     lines = []
@@ -30,19 +34,19 @@ def hpc_sh(J, N, node, o, e, cmd):
 def gen_hpc_sh(ncaa):
     phi_range = range(-180, 180, 10)
     for phi in phi_range:
-        in_list = os.popen(f'ls {ncaa}_rot_lib_options_{phi}_*.in')
+        in_list = os.popen(f'ls {in_path}{ncaa}_rot_lib_options_{phi}_*.in')
 
-        jobs_file = open(f'{ncaa}_rot_lib_{phi}_job.lis','w+')
-        hpc_sh_file = open(f'{ncaa}_rot_lib_{phi}_job.sh','w+')
+        jobs_file = open(f'{bash_path}{ncaa}_rot_lib_{phi}_job.lis','w+')
+        hpc_sh_file = open(f'{bash_path}{ncaa}_rot_lib_{phi}_job.sh','w+')
 
         for in_file in in_list:
             in_file = in_file.replace('\n', '')
             ### -mute MakeRotLibMover and abandon log file (as the number of chi increases, the size of log file will be pretty large) ###
-            sh = f'{make_rot_lib_app} -options_file {in_file} -output_logging false -mute protocols.make_rot_lib.MakeRotLibMover -extra_res_fa {ncaa}.params'+'\n'
+            sh = f'{make_rot_lib_app} -options_file {in_file} -output_logging false -mute protocols.make_rot_lib.MakeRotLibMover -extra_res_fa {params_path}{ncaa}.params'+'\n'
             jobs_file.write(sh)
 
-        jobs_cmd = f'cat {ncaa}_rot_lib_{phi}_job.lis | parallel -j 20'
-        hpc_file.writelines(hpc_sh(f'{ncaa}_rotlib', 1, 20, f'{ncaa}_{phi}', f'{ncaa}_{phi}', jobs_cmd))
+        jobs_cmd = f'cat {bash_path}{ncaa}_rot_lib_{phi}_job.lis | parallel -j 20'
+        hpc_sh_file.writelines(hpc_sh(f'{ncaa}_rotlib', 1, 20, f'{ncaa}_{phi}', f'{ncaa}_{phi}', jobs_cmd))
 
         jobs_file.close()
         hpc_sh_file.close()

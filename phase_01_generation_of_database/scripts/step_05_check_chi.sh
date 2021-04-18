@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check params file if there is "CHI 1  N    CA   C    O "
+# Check params file if there is "N    CA   C    O "
 # This is a confusing bug in molfile_to_params_polymer.py
 
 cd $(dirname $0)
@@ -9,7 +9,7 @@ params_path=$PWD"/output/params/"
 cd ${params_path}
 
 chi_num=1
-wrong_chi='CHI 1  N    CA   C    O  '
+wrong_chi='N    CA   C    O  '
 has_wrong_chi=0
 has_next_chi=0
 
@@ -20,6 +20,9 @@ do
 
     if (( ${result}==${has_wrong_chi} ))
     then
+        echo "Found wrong chi in ${params}!"
+        
+        chi_num=`echo ${tmp:4:1}`
         sed -i '/'"${wrong_chi}"'/d' ${params} # delete wrong chi
 
         (( chi_num++ ))
@@ -37,6 +40,10 @@ do
             tmp=`grep "${next_chi}" ${params}`
             result=$?
         done
+
+        echo "Error fixed."
+    else
+        echo "Check complete: no wrong chi found in ${params}"
     fi
     chi_num=1
 done

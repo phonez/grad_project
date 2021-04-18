@@ -1,5 +1,5 @@
 ## input
-	The input is a set of mol2 file.
+	The input is a batch of mol files or mol2 files (deprecated). See phase_02_validation/benchmark/get_ncaa_from_rcsb.ipynb, and there is a script that converts smile to dipeptide mol file (though few cases get wrong results...). 
 
 ## output
 	
@@ -10,8 +10,8 @@
 ==========
 	
 ## issues
-	* The latest modified scripts have not been tested yet...
+	* Before run bash, change directory to /output/rotlib (rotlib files are generated in working directory)
 	* Use GetChiralTag() to define L_AA and D_AA...?
-	* Modify the gen_rotlib_in.py...?
 	* Copy params and rotlib to ncaa_database...
-	* Inform the version of program we used here...
+	* Inform the version of program we used here...?
+	* For each script, it would make more sense to accomplish the format conversion of a single file (not a batch of files)...

@@ -5,9 +5,10 @@ Convert mol2 file (initial structure) to gjf file (gaussian input file).
 import sys
 import os
 
-mol2_path = os.path.dirname(sys.path[0]) + "/input/mol2/"
+in_mol_path = os.path.dirname(sys.path[0]) + "/input/mol/"
 gjf_path = os.path.dirname(sys.path[0]) + "/output/gjf/"
 chk_path = os.path.dirname(sys.path[0]) + "/output/chk/"
+# chk_path = "/home/rotations/zhangf/gen_ncaa_params/output/chk/"
 
 from rdkit import Chem
 
@@ -70,15 +71,15 @@ def gen_gjf_file(gjf_path, chk_path, gjf_name, mol):
         f.write("\n")
         f.write("\n")
 
-os.chdir(mol2_path)
-mol2_list = []
+os.chdir(in_mol_path)
+in_mol_list = []
 
-for root, dirs, files in os.walk(mol2_path):
-    for mol2_file in files:
-        if os.path.splitext(mol2_file)[1] == ".mol2": # we should name the ncaa with three characters since now!?
-            mol2_list.append(mol2_file)
+for root, dirs, files in os.walk(in_mol_path):
+    for in_mol_file in files:
+        if os.path.splitext(in_mol_file)[1] == ".mol": # we should name the ncaa with three characters since now!?
+            in_mol_list.append(in_mol_file)
 
-for mol2_file in mol2_list:
-    gjf_name = os.path.splitext(mol2_file)[0]
-    mol = Chem.MolFromMol2File(mol2_file, removeHs = False)
-    gen_gjf(gjf_path, chk_path, gjf_name, mol)
+for in_mol_file in in_mol_list:
+    gjf_name = os.path.splitext(in_mol_file)[0]
+    mol = Chem.MolFromMolFile(in_mol_file, removeHs = False)
+    gen_gjf_file(gjf_path, chk_path, gjf_name, mol)

@@ -1413,10 +1413,11 @@ def write_poly_param_file(f, molfile, name, frag_id, peptoid):
                 # So, use first child of c that's not b:
                 # ... again, unless C is root and the O of an ether bond (no other kids)
                 d = [k for k in c.children if k != b][0]
+            
             ### get rid of phi and psi ###
-            ###### !!! some bugs still exist... ######
-            if d.pdb_name != 'H' and a.pdb_name != 'O':
+            if d.ros_type != 'HNbb' and a.ros_type != 'OCbb':
                 yield (bond, a, b, c, d)
+
     def is_sp2_proton(a, b, c, d):
         '''Crude guestimate of H-bonding geometry'''
         # i.e., assume sp2 if the H's grandparent has anything other than single bonds to it.
@@ -1446,6 +1447,23 @@ def write_poly_param_file(f, molfile, name, frag_id, peptoid):
             # "Direction" of chi definition appears not to matter,
             # but we follow the convention of amino acids (root to tip)
             f.write("CHI %i %-4s %-4s %-4s %-4s\n" % (num_chis, d.pdb_name, c.pdb_name, b.pdb_name, a.pdb_name))
+            
+            ### get the type of CHI (sp3-sp3 or sp3-sp2) in log file ###
+            is_b_sp2 = False
+            is_c_sp2 = False
+            for my_bond in c.bonds:
+                if my_bond.order == Bond.DOUBLE:
+                    is_c_sp2 = True
+            for my_bond in b.bonds:
+                if my_bond.order == Bond.DOUBLE:
+                    is_b_sp2 = True
+            if (is_c_sp2 or is_b_sp2) == False:
+                print ("CHI %i %-4s %-4s %-4s %-4s sp3-sp3" % (num_chis, d.pdb_name, c.pdb_name, b.pdb_name, a.pdb_name))
+            elif (is_c_sp2 and is_b_sp2) == True:
+                print ("CHI %i %-4s %-4s %-4s %-4s sp2-sp2" % (num_chis, d.pdb_name, c.pdb_name, b.pdb_name, a.pdb_name))
+            else:
+                print ("CHI %i %-4s %-4s %-4s %-4s sp3-sp2" % (num_chis, d.pdb_name, c.pdb_name, b.pdb_name, a.pdb_name))
+            
             if bond.is_proton_chi:
                 # Only expand proton chis with extra samples if doing so won't generate tens of thousands of confs.
                 extra = "1 20"

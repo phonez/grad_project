@@ -5,7 +5,7 @@ Convert mol file to modified mol file. (to be updated...)
 import sys
 import os
 
-mol2_path = os.path.dirname(sys.path[0]) + "/input/mol2/"
+in_mol_path = os.path.dirname(sys.path[0]) + "/input/mol/"
 mol_path = os.path.dirname(sys.path[0]) + "/output/mol/"
 modified_mol_path = os.path.dirname(sys.path[0]) +"/output/modified_mol/"
 
@@ -72,11 +72,11 @@ for root, dirs, files in os.walk(mol_path):
 
 for mol_file in mol_list:
     mol_name = os.path.splitext(mol_file)[0]
-    mol2_file = mol2_path + mol_name + ".mol2"  
+    in_mol_file = in_mol_path + mol_name + ".mol"  
     mol_file = mol_path + mol_name + ".mol"
     modified_mol_file = modified_mol_path + mol_name + ".mol"
     
-    mol = Chem.MolFromMol2File(mol2_file, removeHs = False)
+    mol = Chem.MolFromMolFile(in_mol_file, removeHs = False)
     backbone_atoms = get_backbone_atoms(mol)
     
     ROOT = backbone_atoms[3] + 1
@@ -93,13 +93,11 @@ for mol_file in mol_list:
     with open(mol_file, "r") as f_read, open(modified_mol_file, "w") as f:
         read_lines = f_read.readlines()
         cursor = -1
-        while (read_lines[cursor][0] == 'M'):
+        while (read_lines[cursor] == "\n" or read_lines[cursor][0] == 'M'):
             cursor = cursor - 1
         cursor = cursor + 1
         
-        write_lines = read_lines[:cursor]
-        for line in write_lines:
-            f.write(line)
+        f.writelines(read_lines[:cursor])
         f.write("M  ROOT %d\n" % (ROOT))
         f.write("M  POLY_N_BB %d\n" % (POLY_N_BB))
         f.write("M  POLY_CA_BB %d\n" % (POLY_CA_BB))
