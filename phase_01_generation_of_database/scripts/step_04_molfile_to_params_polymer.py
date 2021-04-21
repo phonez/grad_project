@@ -1413,10 +1413,10 @@ def write_poly_param_file(f, molfile, name, frag_id, peptoid):
                 # So, use first child of c that's not b:
                 # ... again, unless C is root and the O of an ether bond (no other kids)
                 d = [k for k in c.children if k != b][0]
-            
+
             ### get rid of phi and psi ###
-            if d.ros_type != 'HNbb' and a.ros_type != 'OCbb':
-                yield (bond, a, b, c, d)
+            ### if d.ros_type != 'HNbb' and a.ros_type != 'OCbb': ###
+            yield (bond, a, b, c, d)
 
     def is_sp2_proton(a, b, c, d):
         '''Crude guestimate of H-bonding geometry'''
@@ -1463,6 +1463,7 @@ def write_poly_param_file(f, molfile, name, frag_id, peptoid):
                 print ("CHI %i %-4s %-4s %-4s %-4s sp2-sp2" % (num_chis, d.pdb_name, c.pdb_name, b.pdb_name, a.pdb_name))
             else:
                 print ("CHI %i %-4s %-4s %-4s %-4s sp3-sp2" % (num_chis, d.pdb_name, c.pdb_name, b.pdb_name, a.pdb_name))
+            ### get the type of CHI (sp3-sp3 or sp3-sp2) in log file ###
             
             if bond.is_proton_chi:
                 # Only expand proton chis with extra samples if doing so won't generate tens of thousands of confs.

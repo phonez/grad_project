@@ -33,23 +33,22 @@ def hpc_sh(J, N, node, o, e, cmd):
 # Each of lis file contains 36 commands with the same phi angle and different psi angles ranging from -180 to 180.
 def gen_hpc_sh(ncaa):
     phi_range = range(-180, 180, 10)
+
+    hpc_sh_file = open(f'{bash_path}{ncaa}_rot_lib_job.sh','w+')
+    jobs_cmd = f'cat {bash_path}{ncaa}_rot_lib_job.lis | parallel -j 20'
+    hpc_sh_file.writelines(hpc_sh(f'{ncaa}_rotlib', 1, 20, f'{ncaa}', f'{ncaa}', jobs_cmd))
+    hpc_sh_file.close()
+    
+    jobs_file = open(f'{bash_path}{ncaa}_rot_lib_job.lis','w+')
     for phi in phi_range:
         in_list = os.popen(f'ls {in_path}{ncaa}_rot_lib_options_{phi}_*.in')
-
-        jobs_file = open(f'{bash_path}{ncaa}_rot_lib_{phi}_job.lis','w+')
-        hpc_sh_file = open(f'{bash_path}{ncaa}_rot_lib_{phi}_job.sh','w+')
 
         for in_file in in_list:
             in_file = in_file.replace('\n', '')
             ### -mute MakeRotLibMover and abandon log file (as the number of chi increases, the size of log file will be pretty large) ###
-            sh = f'{make_rot_lib_app} -options_file {in_file} -output_logging false -mute protocols.make_rot_lib.MakeRotLibMover -extra_res_fa {params_path}{ncaa}.params'+'\n'
+            sh = f'{make_rot_lib_app} -options_file {in_file} -output_logging false -mute protocols.make_rot_lib.MakeRotLibMover -extra_res_fa {params_path}{ncaa}.params -use_terminal_residues'+'\n'
             jobs_file.write(sh)
-
-        jobs_cmd = f'cat {bash_path}{ncaa}_rot_lib_{phi}_job.lis | parallel -j 20'
-        hpc_sh_file.writelines(hpc_sh(f'{ncaa}_rotlib', 1, 20, f'{ncaa}_{phi}', f'{ncaa}_{phi}', jobs_cmd))
-
-        jobs_file.close()
-        hpc_sh_file.close()
+    jobs_file.close()
 
 def main(argv):
     assert[len(argv) == 1]

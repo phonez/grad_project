@@ -11,18 +11,26 @@ in_path = os.path.dirname(sys.path[0]) + "/output/in/" # input files for generat
 
 def get_chi_info(ncaa):
     log_file = params_path + ncaa + ".log"
+    params_file = params_path + ncaa + ".params"
     chi_info = []
+    proton_chis = set()
+    with open(params_file, "r") as f:
+        for line in f.readlines():
+            if line[:10] == "PROTON_CHI": # discard proton chi
+                proton_chis.add(line[11])
     with open(log_file, "r") as f:
         for line in f.readlines():
-            if line[:3] == "CHI": # make sure there isn't wrong chis in params file or log file
+            if line[4] not in proton_chis and line[:3] == "CHI": # make sure there isn't wrong chis in params file or log file previously
                 (chi_num, chi_type) = ((int)(line[4]), line[-8:].strip())
                 chi_info.append((chi_num, chi_type))
+    if len(chi_info) > 4:
+        chi_info = chi_info[:4] # discard other chis barbarically...rotlib can only deal with no more than 4 chis
     # get the number of chis and the position of sp3-sp2 chi
     num_chis = len(chi_info)
     sp3_sp2_chi_num = []
-    for chi in chi_info:
-        if chi[1] == 'sp3-sp2':
-            sp3_sp2_chi_num.append(chi[0])
+    for index, chi in enumerate(chi_info):
+        if chi[1] == 'sp3-sp2' or chi[1] == 'sp2-sp2': # as for sp2-sp2 bond, sample 6 bins as well (more is better(we are stupid in chemistry, and such case is less frequent)...in fact, for such bond in BP5 and 4AF, 2 bins (30/60) is enough)
+            sp3_sp2_chi_num.append(index + 1) # ...assume that MakeRotLib app gets the chis as the order presented in params file
     return (num_chis, sp3_sp2_chi_num)
 
 def gen_rotlib_in(ncaa):

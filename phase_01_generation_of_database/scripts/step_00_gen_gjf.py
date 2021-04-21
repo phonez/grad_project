@@ -1,5 +1,5 @@
 '''
-Convert mol2 file (initial structure) to gjf file (gaussian input file).
+Convert mol file (initial structure) to gjf file (gaussian input file).
 '''
 
 import sys
@@ -7,8 +7,8 @@ import os
 
 in_mol_path = os.path.dirname(sys.path[0]) + "/input/mol/"
 gjf_path = os.path.dirname(sys.path[0]) + "/output/gjf/"
-chk_path = os.path.dirname(sys.path[0]) + "/output/chk/"
-# chk_path = "/home/rotations/zhangf/gen_ncaa_params/output/chk/"
+# chk_path = os.path.dirname(sys.path[0]) + "/output/chk/"
+chk_path = "/home/rotations/zhangf/gen_ncaa_params/output/chk/" # prepare gjf files from laptop
 
 from rdkit import Chem
 
@@ -18,6 +18,7 @@ def get_total_charge(mol):
         total_charge += atom.GetFormalCharge()
     return total_charge
 
+'''
 def get_backbone_atoms(mol):
     backbone = Chem.MolFromSmiles("CC(=O)NCC(=O)NC")  # backbone atoms of dipeptide displayed as ordered
     backbone_atoms = mol.GetSubstructMatch(backbone)
@@ -40,6 +41,7 @@ def get_phi_atoms_from_backbone(backbone_atoms):
 
 def get_psi_atoms_from_backbone(backbone_atoms):
     return (backbone_atoms[3], backbone_atoms[4], backbone_atoms[5], backbone_atoms[7])
+'''
 
 def gen_gjf_file(gjf_path, chk_path, gjf_name, mol):
     

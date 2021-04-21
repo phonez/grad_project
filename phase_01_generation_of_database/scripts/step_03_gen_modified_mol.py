@@ -5,7 +5,6 @@ Convert mol file to modified mol file. (to be updated...)
 import sys
 import os
 
-in_mol_path = os.path.dirname(sys.path[0]) + "/input/mol/"
 mol_path = os.path.dirname(sys.path[0]) + "/output/mol/"
 modified_mol_path = os.path.dirname(sys.path[0]) +"/output/modified_mol/"
 
@@ -71,12 +70,11 @@ for root, dirs, files in os.walk(mol_path):
             mol_list.append(mol_file)
 
 for mol_file in mol_list:
-    mol_name = os.path.splitext(mol_file)[0]
-    in_mol_file = in_mol_path + mol_name + ".mol"  
+    mol_name = os.path.splitext(mol_file)[0]  
     mol_file = mol_path + mol_name + ".mol"
     modified_mol_file = modified_mol_path + mol_name + ".mol"
     
-    mol = Chem.MolFromMolFile(in_mol_file, removeHs = False)
+    mol = Chem.MolFromMolFile(mol_file, removeHs = False)
     backbone_atoms = get_backbone_atoms(mol)
     
     ROOT = backbone_atoms[3] + 1
@@ -96,6 +94,33 @@ for mol_file in mol_list:
         while (read_lines[cursor] == "\n" or read_lines[cursor][0] == 'M'):
             cursor = cursor - 1
         cursor = cursor + 1
+
+        # we need to adjust the relative position of records of bond info
+        # to span atom tree correctly in molfile_to_params_polymer.py (due to some stupid functions...)
+        # N -> CA -> C -> UPPER
+        num_atoms = int(read_lines[3][0:3]) # refers to scripts/python/rosetta_py
+        first_bond_idx = 3 + num_atoms + 1
+
+        N_CA_line = ""
+        CA_C_line = ""
+        C_UPPER_line = ""
+        for line in read_lines:
+            if len(line.split()) > 1:
+                tmp = {line.split()[0], line.split()[1]} 
+                if {f"{POLY_N_BB}", f"{POLY_CA_BB}"} == tmp:
+                    N_CA_line = line
+                if {f"{POLY_CA_BB}", f"{POLY_C_BB}"} == tmp:
+                    CA_C_line = line
+                if {f"{POLY_C_BB}", f"{POLY_UPPER}"} == tmp:
+                    C_UPPER_line = line
+        
+        # swap position
+        read_lines.remove(N_CA_line)
+        read_lines.remove(CA_C_line)
+        read_lines.remove(C_UPPER_line)
+        read_lines.insert(first_bond_idx, C_UPPER_line)
+        read_lines.insert(first_bond_idx, CA_C_line)
+        read_lines.insert(first_bond_idx, N_CA_line)
         
         f.writelines(read_lines[:cursor])
         f.write("M  ROOT %d\n" % (ROOT))
@@ -109,7 +134,7 @@ for mol_file in mol_list:
         f.write("\n")
         f.write("M  POLY_UPPER %d\n" % (POLY_UPPER))
         f.write("M  POLY_LOWER %d\n" % (POLY_LOWER))
-        f.write("M  POLY_CHARGE %d\n" % (POLY_CHARGE))
+        f.write("M  POLY_CHG %d\n" % (POLY_CHARGE))
         f.write("M  POLY_PROPERTIES")
         for str in POLY_PROPERTIES:
             f.write(" %s" % (str))
