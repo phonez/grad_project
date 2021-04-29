@@ -1,6 +1,7 @@
 '''
 Since MakeRotLib consumes a lot of computing resources, we prepare bash scripts here for run in a cluster.
 This script is authored by wfz.
+Before run hpc_bash, change directory to /output/rotlib (rotlib files are generated in working directory).
 '''
 
 make_rot_lib_app = '/lustre1/chuwang_pkuhpc/rosetta/rosetta_src_2019.47.61047_bundle/main/source/bin/MakeRotLib.mpi.linuxiccrelease'
@@ -29,7 +30,6 @@ def hpc_sh(J, N, node, o, e, cmd):
     lines.append(cmd)
     return lines
 
-# Each of these bash scripts contains ".lis" with specific phi angle
 # Each of lis file contains 36 commands with the same phi angle and different psi angles ranging from -180 to 180.
 def gen_hpc_sh(ncaa):
     phi_range = range(-180, 180, 10)

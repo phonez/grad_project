@@ -98,6 +98,7 @@ for mol_file in mol_list:
         # we need to adjust the relative position of records of bond info
         # to span atom tree correctly in molfile_to_params_polymer.py (due to some stupid functions...)
         # N -> CA -> C -> UPPER
+        # and we'll avoid the confusing chi bug "N CA C O"
         num_atoms = int(read_lines[3][0:3]) # refers to scripts/python/rosetta_py
         first_bond_idx = 3 + num_atoms + 1
 

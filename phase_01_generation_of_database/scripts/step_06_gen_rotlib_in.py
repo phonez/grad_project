@@ -1,6 +1,7 @@
 '''
 Generate input files (.in) for MakeRotLib application. (to be updated...)
 This script is authored by wfz.
+Before generate rotlibs, dump ncaa pdb to see if it has correct chemical structure.
 '''
 
 import os
@@ -12,6 +13,7 @@ in_path = os.path.dirname(sys.path[0]) + "/output/in/" # input files for generat
 def get_chi_info(ncaa):
     log_file = params_path + ncaa + ".log"
     params_file = params_path + ncaa + ".params"
+
     chi_info = []
     proton_chis = set()
     with open(params_file, "r") as f:
@@ -24,7 +26,9 @@ def get_chi_info(ncaa):
                 (chi_num, chi_type) = ((int)(line[4]), line[-8:].strip())
                 chi_info.append((chi_num, chi_type))
     if len(chi_info) > 4:
-        chi_info = chi_info[:4] # discard other chis barbarically...rotlib can only deal with no more than 4 chis
+        raise ValueError("Too many chis! Maximum is four.")
+        # chi_info = chi_info[:4] # discard other chis barbarically...rotlib can only deal with no more than 4 chis
+    
     # get the number of chis and the position of sp3-sp2 chi
     num_chis = len(chi_info)
     sp3_sp2_chi_num = []

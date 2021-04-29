@@ -10,7 +10,7 @@ log_path=$PWD"/output/log/"
 cd ${gjf_path}
 
 cur=0
-total=`ls ./*.gjf|wc -l`
+total=`ls ./*.gjf | wc -l` # word count; here for num of files
 for gjf_file in *.gjf
 do
 ((cur++))

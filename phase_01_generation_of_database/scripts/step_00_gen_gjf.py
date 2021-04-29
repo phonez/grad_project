@@ -1,5 +1,7 @@
 '''
 Convert mol file (initial structure) to gjf file (gaussian input file).
+We could also use Open Babel to get gjf files and then modify them.
+Alternatively, some other methods are acceptable for structures optimization.
 '''
 
 import sys
@@ -7,7 +9,7 @@ import os
 
 in_mol_path = os.path.dirname(sys.path[0]) + "/input/mol/"
 gjf_path = os.path.dirname(sys.path[0]) + "/output/gjf/"
-# chk_path = os.path.dirname(sys.path[0]) + "/output/chk/"
+# chk_path = os.path.dirname(sys.path[0]) + "/output/chk/" 
 chk_path = "/home/rotations/zhangf/gen_ncaa_params/output/chk/" # prepare gjf files from laptop
 
 from rdkit import Chem
@@ -78,7 +80,7 @@ in_mol_list = []
 
 for root, dirs, files in os.walk(in_mol_path):
     for in_mol_file in files:
-        if os.path.splitext(in_mol_file)[1] == ".mol": # we should name the ncaa with three characters since now!?
+        if os.path.splitext(in_mol_file)[1] == ".mol": # name the ncaa with three characters from now
             in_mol_list.append(in_mol_file)
 
 for in_mol_file in in_mol_list:
