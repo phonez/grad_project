@@ -1,0 +1,24 @@
+<ROSETTASCRIPTS>               
+    <SCOREFXNS>
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        <ResidueName name="ncaa" residue_name3="%%ncaa_name%%"/>
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+    </TASKOPERATIONS>
+
+    <SIMPLE_METRICS>
+        <RMSDMetric name="rmsd_ah" rmsd_type="rmsd_all_heavy" use_native="1" super="1" residue_selector="ncaa"/>
+    </SIMPLE_METRICS>
+
+    <MOVERS>
+        <RunSimpleMetrics name="cal_rmsd_ah" metrics="rmsd_ah" suffix="_ah"/>   
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover="cal_rmsd_ah"/>
+    </PROTOCOLS>
+
+</ROSETTASCRIPTS>

@@ -1,0 +1,15 @@
+-relax:constrain_relax_to_start_coords
+-relax:coord_constrain_sidechains
+-relax:ramp_constraints true
+
+-packing:ex1
+-packing:ex2
+-packing:use_input_sc
+-packing:no_optH false
+-packing:flip_HNQ
+
+-out:nstruct 1
+-out:suffix _opt
+-out:path:pdb ../output/
+-out:path:score ../output/
+

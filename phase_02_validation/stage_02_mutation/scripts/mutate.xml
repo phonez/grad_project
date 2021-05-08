@@ -1,0 +1,23 @@
+<ROSETTASCRIPTS>               
+    <SCOREFXNS>
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        <ResidueName name="mutant" residue_name3="%%ncaa%%"/>
+        Index name="mutant" resnums="%%res_pos%%"/>
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+    </TASKOPERATIONS>
+
+    <FILTERS>
+    </FILTERS>
+
+    <MOVERS>
+        <MutateResidue name="mutate" residue_selector="mutant" new_res="%%ncaa%%"/>
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover="mutate"/>
+    </PROTOCOLS>
+</ROSETTASCRIPTS>

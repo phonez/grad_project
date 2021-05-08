@@ -1,0 +1,32 @@
+<ROSETTASCRIPTS>               
+    <SCOREFXNS>
+        <ScoreFunction name="r15" weights="ref2015_cart"/>
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+        <Index name="mutant" resnums="%%orig_aa%%"/>
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+        <InitializeFromCommandline name="init"/>
+        <IncludeCurrent name="cur"/>
+    </TASKOPERATIONS>
+
+    <SIMPLE_METRICS>
+        <RMSDMetric name="rmsd_ah" rmsd_type="rmsd_all_heavy" use_native="1" super="1"/>
+    </SIMPLE_METRICS>
+
+    <MOVERS>
+        <MutateResidue name="mutate" residue_selector="mutant" new_res="%%ncaa%%"/> 
+        <RunSimpleMetrics name="cal_rmsd_ah" metrics="rmsd_ah" suffix="_ah"/>    
+        <FastRelax name="relax_all" scorefxn="r15" task_operations="init,cur" cartesian="1"/>
+    </MOVERS>
+
+    <PROTOCOLS>
+		<Add mover="mutate"/>
+        <Add mover="relax_all"/>
+        <Add mover="cal_rmsd_ah"/>
+    </PROTOCOLS>
+
+    <OUTPUT scorefxn="r15"/>
+</ROSETTASCRIPTS>

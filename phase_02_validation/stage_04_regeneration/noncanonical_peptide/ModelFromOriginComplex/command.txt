@@ -1,5 +1,0 @@
-
-# structure optimization of ncaa
-cd ./output
-$ROSETTA_BIN/relax.static.linuxgccrelease -s ../input/4JJE_clean.pdb -extra_res_fa ../input/1MH.params ../input/HLX.params -relax:respect_resfile -packing:resfile ../input/test_params.resfile > test_params.log
-

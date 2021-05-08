@@ -1,0 +1,29 @@
+<ROSETTASCRIPTS>               
+    <SCOREFXNS>
+    </SCOREFXNS>
+
+    <RESIDUE_SELECTORS>
+    </RESIDUE_SELECTORS>
+
+    <TASKOPERATIONS>
+    </TASKOPERATIONS>
+
+    <SIMPLE_METRICS>
+        <RMSDMetric name="rmsd_ah" rmsd_type="rmsd_all_heavy" use_native="1" super="1"/>
+        <RMSDMetric name="rmsd_a" rmsd_type="rmsd_all" use_native="1" super="1"/>
+        <RMSDMetric name="rmsd_bb" rmsd_type="rmsd_protein_bb_heavy" use_native="1" super="1"/>
+    </SIMPLE_METRICS>
+
+    <MOVERS> 
+        <RunSimpleMetrics name="cal_rmsd_ah" metrics="rmsd_ah" suffix="_ah"/>
+        <RunSimpleMetrics name="cal_rmsd_a" metrics="rmsd_a" suffix="_a"/> 
+        <RunSimpleMetrics name="cal_rmsd_bb" metrics="rmsd_bb" suffix="_bb"/>      
+    </MOVERS>
+
+    <PROTOCOLS>
+        <Add mover="cal_rmsd_ah"/>
+        <Add mover="cal_rmsd_a"/>
+        <Add mover="cal_rmsd_bb"/>
+    </PROTOCOLS>
+
+</ROSETTASCRIPTS>

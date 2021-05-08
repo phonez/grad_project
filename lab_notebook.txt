@@ -189,7 +189,7 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 
 #### 周五
 * 目标
-修改4JJE.pdb为rosetta可读的pdb文件，将原有的序列3Pal-D-βhLeu-hLeu-D替换为D-βhLeu-hLeu-D（inhibitor 2)；并分别突变成D-βhLeu-3Pal-D（inhibitor 4)，D-βhLeu-V-D（inhibitor 8)，（3-OMe)Phe-βhLeu-hLeu-D（inhibitor 3)；重置github上的grad_project下的文件结构。
+修改4JJE.pdb为rosetta可读的pdb文件，将原有的序列3Pal-D-βhLeu-hLeu-D替换为D-βhLeu-hLeu-D（inhibitor 2)；并分别突变成D-βhLeu-3Pal-D（inhibitor 4)，D-βhLeu-V-D（inhibitor 8)，(3-OMe)Phe-βhLeu-hLeu-D（inhibitor 3)；重置github上的grad_project下的文件结构。
 * 方法
 1. 依照此前构建的gen_modified_pdb.py，修改4JJE.pdb为rosetta可读的pdb文件。（注：删除了4JJE.pdb中多肽N端的ACE，删除了C端多余的一个C原子）
 2. 运行relax，只允许多肽的残基构象发生变化（test_params.resfile），测试其构象是否合理（与原有的复合物结构相比，RMSD不会太大，一般小于1；打分合理，原子之间能保持原有的连接关系）。查阅Pyrosetta文档，找到针对不同分子的多种rmsd计算方法，如all_atom_rmsd，CA_rmsd，bb_rmsd等，这些方法分别对相应的原子做rmsd计算。这里选择pyrosetta.rosetta.core.scoring.all_atom_rmsd。
@@ -211,7 +211,7 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 
 #### 周一
 * 目标
-在限制坐标的条件下，完成蛋白-多肽**初始结构**的结构优化；调整自由度，突变多肽上的氨基酸，完成蛋白-多肽**结合界面**的结构优化。
+在限制坐标的条件下，完成蛋白-多肽**初始结构**的结构预优化；调整自由度，突变多肽上的氨基酸，完成蛋白-多肽**结合界面**的结构优化。
 * 方法
 1. 为初始结构（4JJE_clean_inhibitor_2.pdb）骨架重原子添加坐标限制势，使其不偏离初始输入的结构（-relax:constrain_relax_to_start_coords），调用relax方法做结构优化。这是由于：在Rosetta的评分体系中，即使是天然蛋白也会因为存在很多原子间的空间冲突（clash）导致评分急剧上升，被判定为结构不合理。如果不做结构优化，蛋白质本身的不合理结构而非抑制剂与蛋白结合的强度将会成为评分的主导因素，将无法通过打分的差异准确判断抑制剂与蛋白的结合能力的差异。
 2. 关闭蛋白质骨架、侧链自由度，关闭多肽beta-aa骨架自由度（假定这些inhibitor中beta-aa的骨架相较于4JJE.pdb变动不大），进一步优化4JJE_opt_inhibitor_2的构象，同时给出多肽抑制剂的RMSD值（rmsd_all_heavy）。
@@ -226,3 +226,207 @@ PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Tex
 1. 文献中使用IC50衡量抑制剂的结合能力。IC50定义为半抑制浓度，即抑制50%的物质（如酶，细胞受体等）所需抑制剂的浓度。本例中，抑制剂为多肽，我们需要假定：多肽与蛋白质的结合状态等价于蛋白质处于活性被抑制的状态。以c表示多肽的IC50值，c'表示位点发生突变的多肽的IC50值；ΔG（即ΔG(bind)）表示多肽与折叠状态下的蛋白发生结合的自由能变（反应1），ΔG'表示位点发生突变的多肽与折叠状态下的蛋白发生结合的自由能变（反应2），ΔΔG（即ΔΔG(bind)）等于ΔG'减去ΔG的值。通过推导，可以得到ΔΔG正比于ln(c'/c)。另外，在本例中，位点突变发生在多肽上，可以认为反应1与反应2中蛋白质的折叠状态是相同的（即ΔG(fold)等于0），并假定：多肽单体在突变前后的自由能的差值对ΔΔG的影响可以忽略不计（留待后续计算的验证）。以t代表结构优化后复合物（蛋白-多肽）的打分值，t’代表复合物中多肽发生突变对应的打分值。由于Rosetta中打分值的大小线性对应于体系自由能的大小（同一体系），于是，以(t'-t)近似ΔΔG，期待的理论结果是：(t'-t)与ln(c'/c)呈线性关系。以4JJE_clean_inhibitor_2_opt_0001.pdb为基准（t0，c0），绘制散点图，横坐标ln(c/c0)，纵坐标(t-t0)。
 * 结果
 1. 拟合结果线性并不理想，$$R^2 = 0.05$$。
+
+#### 周三
+* 目标
+调整初始结构和结合界面的结构优化的条件。
+* 方法
+1. 猜测结合界面的结构优化自由度设置可能存在问题。先考虑将初始结构的结构优化视为最终结果。
+2. 从结果1可以看出，对结合界面进行结构优化后反而给出了更差的线性拟合结果（不考虑inhibitor3时），综合本周周一给出的结果2，初步得到：优化结合界面时自由度设置太紧是relax后打分升高的主要因素。另一方面，inhibitor3对应的复合物打分值（-779）要小于inhibitor2（-775），但在实验数据上其IC50值更大，检查后发现inhibitor3的输入序列出错，应为(3-OMe)Phe-βhLeu-V-D。调整初始优化条件，重新优化初始结构。
+* 结果
+1. 除去inhibitor3（(3-OMe)Phe-βhLeu-hLeu-D），其余复合物对应的线性拟合结果为$$R^2 = 0.97$$。
+2. 拟合结果线性并不理想，$$R^2 = 0.06$$。问题可能在于初始优化条件较粗糙（比如，生成结构的较少，数据随机性较大，没有通过rotlib文件进行rotamer采样，对于ncaa的打分函数不够精确，需要调整权重等等）。
+
+#### 周四
+* 目标
+调整初始结构和结合界面的结构优化的条件。
+* 方法
+1. 通过hpc计算生成rotlib文件。
+2. 经尝试，cartesian_ddG不适用于突变成ncaa的情形。初始结构的预优化：限制骨架和侧链重原子，不偏离初始结构；在模拟退火过程中，不调整坐标限制的权重。生成50个结构取能量最低者作为结合界面结构优化的输入结构。
+3. ΔΔG反映的是突变（无论是发生在蛋白质上还是发生在多肽上）对蛋白-多肽相互作用能的影响。而对单个复合物的打分值对应的自由能可以看成由三个部分组成：蛋白质的自由能，多肽的自由能，蛋白-多肽相互作用产生的自由能。在本例中，突变位点发生在多肽上，不同复合物的打分值“包含”的对于多肽的打分值是不同的，因此复合物的打分值之差不能准确反应ΔΔG。需要用复合物的打分值减去结构优化后的多肽单体的打分值（Rosetta不能给出对ncaa的准确打分），再作差。对于结合界面的结构优化，先采取较为粗糙的方式：对整个复合物做relax，生成200个结构。其它inhibitor对应的复合物从inhibitor_2突变而来。
+* 结果
+1. 获得A90((3-OMe)Phe)、HLX(hLeu)、1MH(3Pal)等残基的rotlib文件。
+2. 比较得：inhibitor_2对应复合物的能量最低者依次为第25号结构。
+3. 提交任务，等待结果。
+
+#### 周五
+* 目标
+对于inhibitor_2对应的200个复合物，给出score-RMSD图（RMSD计算以输入结构为参照）；对于每个抑制剂生成的200个复合物结构中的每一个，给出ΔΔG。
+* 方法
+1. 对于inhibitor_2，参考$ROSETTA/main/demos/tutorials/ligand_docking/scripts/extract_scores.bash脚本，提取打分文件中的total_score，rmsd_all_heavy信息，绘制score-RMSD图。
+2. 对于每个inhibitor生成的200个复合物结构，对多肽单体进行初步结构优化、打分、取最小者，对应游离状态下的多肽。取打分最低的五个复合物结构，作差得到ΔΔG，取平均。以inhibotr_2为基准，按本周二方法1，绘制散点图。
+* 结果
+1. 获得inhibitor_2对应复合物的打分图。由于这一步针对整个蛋白做结构优化，RMSD较大，为1.5（±0.2）；打分值为-781（±10）。
+2. 线性拟合效果不佳。具体表现为：inhibitor_3对应的复合物的IC50实验值最大，但是ΔΔG小于0，结合力高于inhibotr_2；inhibitor_8对应的复合物的IC50实验值最小，但是ΔΔG大于0，结合力低于inhibotr_2。
+
+----------
+
+## 第六周
+
+### 本周目标
+在benchmark蛋白上做位点突变；联系厂家，合成不带醛基的inhibitor 2/3/4/8，同时构建商业可购买的ncaa库。
+
+#### 周一
+* 目标
+确定benchmark蛋白，以测试rosetta对ncaa的建模效果。
+* 方法
+1. PDB中检索（query）字段：Full Text = ""unnatural amino acid"" OR Full Text = ""non-canonical amino acid""。
+* 结果
+1. 共得到155个候选结果。考察包含alpha-ncaa的蛋白质结构，手动筛选得到75个结果（包含少量重复的ncaa），保存在ncaa-containing_protein.csv（pdb_entry，ncaa_entry）中。筛选过程中，找到一篇研究非共价结合的非天然多肽抑制剂的文献（DOI:10.1021/acsmedchemlett.6b00303，PDB：5TEG），适合作为本课题的benchmark，后续可以从这篇文献出发，可能寻找到更多类似的文献。
+
+#### 周二
+* 目标
+从pdb网页中爬取ncaa的信息，并将ncaa的smile信息转化为输入结构（dipeptide结构）。
+* 方法
+1. 采用requests-html中的HTMLSession方法，爬取数据；采用rdkit中ReplaceSubstructs方法，获得dipeptide。
+* 结果
+1. 相关脚本位于get_ncaa_from_rcsb.ipynb。
+
+#### 周三
+* 目标
+挑选具有代表性的ncaa-pdb，给出相应的params文件，用以测试构象是否合理（Rosetta能否对这些ncaa很好地建模）；给出本周周一结果1中文献涉及到的ncaa相应的params文件，用以测试能否挑选出实验验证的ncaa插入位置。
+* 方法
+1. 挑选中尽量保证ncaa的结构多样性（但不过于复杂，以致难以合成或建模）、出现的频率等，比如能覆盖各种天然氨基酸的衍生物，又如包含芳香基团、不同长度的烷烃链等。
+* 结果
+1. 统计ncaa在不同文献中出现的频率，同时对ncaa按照指纹相似性（Topological Fingerprint，Tanimoto similarity）对结构进行分类。最终选定了其中19个ncaa进行测试，对应18个蛋白质结构，统计在benchmark_protein.pptx中。更新benchmark_complex.pptx。
+
+#### 周四 & 周五
+* 目标
+与厂家沟通多肽抑制剂购买的相关事宜；针对蛋白质（PDB：5TEG），准备ncaa所需的params文件。
+
+----------
+
+## 第七周
+
+### 本周目标
+在18个benchmark protein上做位点突变，测试rosetta对ncaa的建模能力；在2个benchmark complex上做突变扫描，测试能否得到与实验一致的结果；继续和厂家沟通，构建商业可购买的ncaa库。
+
+#### 周一
+* 目标
+获取benchmark_protein和benchmark_complex涉及到的ncaa的rotlib文件。
+* 方法
+1. 在hpc上提交任务。
+2. 修改step_03_gen_modified_mol.py，辅助生成正确的原子树。
+3. 在hpc上提交生成rotlib的任务。
+* 结果
+1. 报错：“Only the third ICOOR atom in a topology file should list itself as its own dihedral atom”。表明params文件没有正确记录分子的拓扑结构。
+2. 对于2ML和4CF（PDB ligand entry），Pyrosetta分别报错：“unrecognized mm_atom_type_name CT”和“unrecognized mm_atom_type_name CN”。尝试用其它软件生成2ML和4CF的二肽结构，报告相同的错误。查阅molfile_to_polymer.py，“CT”指代不含氢的sp3杂化碳原子。查阅rosetta内置的ncaa库，找到如B57（alpha-methyl-leucine），其alpha-C不含氢，但是对应的mm_atom_type是CT1（含有一个氢原子），对其如何修改仍存疑（对于alpha-C上含氢原子的情形，目前只能手动将CT修改为CT1）。
+3. 报错：“Atom name not found in MutableResidueType”。查阅资料后，在MakeRotLib方法后添加关键字-use_terminal_residues，未报错。
+
+#### 周二
+* 目标
+完善对params文件的验证流程；了解rotlib中对不同类型的CHI角的质心的定义（centroids的个数），以确定每个ROTWELL包含的优势旋转角；选取一个蛋白进行初步的结构优化测试。
+* 方法
+1. 在对某一ncaa生成rotlib文件前，通过Pyrosetta读取params文件后导出含单个ncaa的pdb文件，手动查看ncaa的拓扑结构是否合理。
+2. 在生成rotlib文件的过程中，目前有如下问题：
+	- CHI角个数：
+		- 允许的最大CHI角个数？从rotlib文件格式来看，最多只能记录四个CHI角的数值。
+		- 是否包括PROTON_CHI？从Rosetta内置的ncaa的params文件来看，不包括PROTON_CHI。这里指定的是rotatable heavy atom chis。
+		- 对于没有CHI角的部分脯氨酸衍生物，是否需要构建rotlib？从Rosetta内置的ncaa的params文件来看，不需要构建rotlib文件（但需额外构建params_rot文件？）。
+	- 不同类型CHI角的优势旋转角（CENTROIDS/BINS）个数？
+		- Rosetta MakeRotLib官方文档对CHI角分为两类：sp3-sp3和sp3-sp2，对应优势旋转角的个数分别为3个和6个。
+		- Dunbrack Rotamer Library对CHI角分为两类：rotameric（即sp3-sp3）和non-rotameric。后者主要（？）指末端的sp3-sp2类型的CHI角，且受到位置靠前的CHI角分布区间的影响（<https://zhuanlan.zhihu.com/p/262211868>）。参考Rosetta内置的ncaa的params文件，大部分sp3-sp2的优势旋转角为2个。
+3. 选取5HQI.pdb和6I8N.pdb进行初步的测试。
+* 结果
+1. 结果显示，除2ML、4CF（Pyrosetta不能读取这两个ncaa对应的params文件），DPP（与Rosetta已内置该ncaa），其它16个ncaa的params文件均能给出合理的分子拓扑结构。
+2. 修改step_06_gen_rotlib_in.py，使得：对于CHI角大于四个的情形，只取params文件的前四个（需要进一步测试其rotlib文件是否有效）；对于sp2-sp2和sp3-sp2，均考虑6个优势旋转角。
+3. 选取6I8N.pdb和5HQI.pdb进行测试，relax后打分，显示合理的结果。证明params文件的正确性。
+
+#### 周三
+* 目标
+对其中一个蛋白做位点突变，优化结构，测试构象是否合理。
+* 方法
+1. 以6I8N.pdb为例，调用MutateResidue，将蛋白中非天然氨基酸HOX所在位点突变成对应的ncaa。
+2. 对突变后的结构（先将pdb文件中的HETATM改为ATOM）做限制性优化。具体而言：先对蛋白整体做结构优化（添加坐标限制势），再选择ncaa及其附近氨基酸进行局部的结构优化（同时关闭其余氨基酸的骨架自由度和侧链自由度），绘制score-RMSD图。对于后者，考虑采用NeighborhoodResidueSelector配合FastRelax（或者DesignAround配合MinMover?）。
+* 结果
+1. 除骨架原子外，ncaa侧链原子坐标发生变化，说明导入了params文件中的坐标信息。运行过程中提示WARNING：“Patch Cterm_amidation implies it can apply to residue type HOX, but actually applying it fails. You may want to check your patch definitions.”。
+2. 得到optimize.xml，RMSD约为1，可能是采样不充分的缘故（也可能是rosetta对包含ncaa的蛋白质的rmsd计算存在问题），在集群服务器中采样200个结构；且打分很高，查看各个氨基酸的打分，结合结构，可以看到晶体中某个loop结构出现断裂，在cartesian空间下采样时加上-crystal_refine这一关键词。
+
+#### 周四 & 周五
+* 目标
+测试CHI角大于四个的情形；与商家联系构建商业可购买的ncaa库。
+* 方法
+1. 以BUC为例，导入Rosetta。
+2. 联系吉尔生化厂家，在PubChem中爬取相应ncaa的数据。
+* 结果
+1. 对于CHI角大于四个的情形，需在params文件中删除某些CHI角以读取rotlib文件。
+2. 获得吉尔生化包含的ncaa库，已经拿到包含各种修饰的ncaa的Compound CID，InChi，Smiles相应资料。
+
+----------
+
+## 第八周
+
+### 本周目标
+尽快给出各benchmark的测试结果，完善ncaa库；订购caspase相应的多肽抑制剂；开始非天然多肽的设计。
+
+#### 周一
+* 目标
+在剩余15个benchmark protein上做位点突变，测试rosetta对ncaa的建模能力。
+* 方法
+1. 突变蛋白质上对应位点的ncaa，按照上周建立的流程处理剩余蛋白。
+* 结果
+1. 0WZ的rotlib不能导入（在突变时报错）；残基不能突变成8LJ（报错：Atom name not found in MutableResidueType）。上周在测试1A2U蛋白时，得到的RMSD-score打分图中RMSD值偏大（约1.4左右），猜测是只取params文件前四个CHI角生成rotlib的策略存在问题（从pymol的结构比对来看似乎如此），对于CHI角大于四的ncaa，不加上rotlib文件进行测试。在局部结构优化时，调整优化半径为8埃（大约两个残基的半径）。5MZ7蛋白在做整体结构优化时报错（段错误），3FYG报错（“too many tries in fill_missing_atoms!”）。经查，是rosetta导出的pdb文件将ligand当做ATOM类型。
+
+#### 周二
+* 目标
+根据吉尔生化厂家给出化学试剂目录表建库；完成周一剩余蛋白的结构优化；对蛋白-多肽复合物benchmark做测试。
+* 方法
+1. 由于所给目录包含多种保护基修饰的ncaa，需要做一步筛选去重。
+2. 按照上周建立的流程处理剩余蛋白。
+3. 对于选定的SETD8复合物，pdb库中存在两个蛋白：1ZKK，5TEG。其中1ZKK中复合物中为天然多肽，5TEG为非天然多肽（KRHR(Nle)VLR）。对于5TEG，取A、D链；对于1ZKK，取A、E链，如此两个复合物的序列除多肽部分外其它序列均相同。因此，考虑先从1ZKK出发，先对蛋白通过两步relax对复合物整体做预优化（内坐标空间下，添加固定的坐标限制势，取五十个结构的能量最小者；笛卡尔空间下，不固定坐标限制势，查rmsd-score图，看能量是否收敛，若收敛，取两百个结构的最小者进行接下来的突变试验）。突变成NLE后，在笛卡尔空间下，调整参数，对蛋白整体做结构优化，看能量是否收敛。通过两步检测优化策略的可行性。其它位点、其它氨基酸同理。
+* 结果
+1. 初步筛选得到60个左右的ncaa（包含价格、CID号、结构等信息）。
+2. 3FYG蛋白打分偏高（第一步限制性优化时），查看各个氨基酸的打分，可能是蛋白配体的结构存在问题。由于其所对应的氨基酸YOF与F2Y结构类似，故舍弃该蛋白；其余蛋白已提交计算。
+3. 1ZKK的两步预优化（包含小分子）给出的rmsd-score图显示能量是收敛的。在突变成NLE的过程中报错，判断是在rosetta scripts使用ref2015_cart打分函数时，不能对1ZKK中的小分子SAM建模。
+
+#### 周三
+* 目标
+分析蛋白质结构优化的结果。
+* 方法
+1. 对每一个benchmark protein包含的ncaa，比较优化后的蛋白质中ncaa各个chi角与天然蛋白结构下ncaa各个chi角的偏差，选取cutoff=20度，即当chi角差值小于20度认为与天然状态相近，采样是成功的。对于蛋白质上有多个ncaa的情形，分别计算；对于ncaa有多个chi角（chi1，chi2...）的情形，计算在顺序靠前的chi角采样均命中的情形，当前chi角有多少个采样命中。
+* 结果
+1. 采用biopython中的calc_dihedral进行计算。其中一个结果，如：BP5，[183, 169, 32], [181, 39, 1]。对数据的解释，在蛋白质4IWW中，有两个位点插入了非天然氨基酸BP5，该ncaa包含三个chi角，在两百次采样中，对于第一个位点，183个结构成功采样chi1，163个结构成功采样chi1，chi2，32个结构成功采样chi1，chi2，chi3；对于第二个位点，181个结构成功采样chi1，39个结构成功采样chi1，chi2，1个结构成功采样chi1，chi2，chi3。其余六个非天然氨基酸：C6C，[108, 108, 108, 108]；DV7，[21, 8, 8], [116, 52, 21], [0, 0, 0], [0, 0, 0]；FTR，[198, 0], [37, 22], [113, 41], [0, 0], [169, 0], [100, 82], [154, 4], [2, 2]；0WZ，[200, 200, 0]；HZP，[]；TPO，[0, 0, 0], [0, 0, 0]。
+
+#### 周四 & 周五
+* 目标
+使用mysql在本地服务器上构建ncaa库。
+* 方法
+1. 目前已经构建三个表，entry，commerce，benchmark。entry以InChI、SMILES等表项（不包含手性原子）记录其它表中涉及的ncaa；commerce以公司名称、价格、cas号、InChI立体化学层等表项记录商业可购买的ncaa（去除了保护基）；benchmark以protein、pdb等表项记录获得含有ncaa的蛋白质。
+* 结果
+1. 建库基本完成，目前整理得到66种不同侧链结构的α-ncaa。
+
+----------
+
+## 第八周
+
+### 本周目标
+给出1ZKK的突变结果，开始非天然多肽的设计。
+
+#### 周一 & 周二
+* 目标
+优化benchmark protein的结果。
+* 方法
+1. 重新选择并处理benchmark protein（直接依据ncaa的pdb entry在pdb中查询并挑选蛋白），调整优化策略。其一，尽可能选择包埋于蛋白质内侧的ncaa。这是由于位于蛋白质不同位置的ncaa在天然状态下的构象灵活度不同，如位于蛋白质表面的ncaa（如之前选择的4AF、DV7、TPO、HZP）构象灵活多变（不同构象间能量壁垒较小），晶体结构可能只反应某一状态下的构象，此时rotamer recovery可能较差。其二，最好选择不包含小分子的蛋白质，对蛋白质做预处理时，多聚体只保留一条链。rosetta对小分子的建模并不十分理想，当rotamer recovery较差时，增加了需要排除判断的条件。其三，根据第七周周二给出的结果，不考虑chi角大于四的ncaa。其四，在优化的过程中，应先对蛋白做限制性预优化，再将此作为输入结构，完成后续的突变、优化（事实上，pdb中的蛋白结构也可能存在问题，因此必须先使用Rosetta调整该结构）；第二步优化时应保持骨架不变，即先把骨架错误的可能性排除，看侧链能否采样正确。
+* 结果
+1. 重新筛选benchmark为：4IWW(BP5)，1A3U(C6C)，6SQC(2ML)，5CI0(F2Y)，6BCY(TPO)，3G3P(NLE)，6V5T(FTR)，4XS7(OAS)，5OGL(PPN)。
+
+#### 周三 & 周四
+* 目标
+对所选benchmark做结构优化。
+* 方法
+1. 结构优化过程分为两步。第一步，对蛋白质进行限制性优化：为蛋白质骨架和侧链添加坐标限制势，对蛋白质整体做放松（relax）处理。一步输出50个结构，取能量最小的结构作为下一步的初始结构。第二步：对包含非天然氨基酸的局部进行结构优化：以非天然氨基酸为中心，选择半径为8 Å的球壳，在笛卡尔空间下，保持蛋白质或多肽骨架不变，对球壳内的氨基酸进行侧链重排。第二步输出200个结构，对此200个结构进行数据分析。一方面，分析非天然氨基酸的构象恢复比例（rotamer recovery），即比较优化后的蛋白质中非天然氨基酸各个侧链旋转角（chi）与天然蛋白结构中各个侧链旋转角的偏差。选取界限20°，即当旋转角差值小于20°认为与天然状态相近，采样是成功的。另一方面，分析打分值在前10%（即最低的10%）的蛋白结构中非天然氨基酸的侧链采样情况。
+2. 对于1中方法，将笛卡尔空间更换为内坐标空间；对于6V5T，选取141位ncaa进行突变（周围环境没有其它ncaa）。
+* 结果
+1. 对于前四个蛋白非天然氨基酸的第一个chi角，1A3U、4IWW的构象恢复比例接近100%，而其余两个蛋白接近0。观察结构，发现F2Y、BP5的苯环出现不合理的结构变形。可能需要添加额外的torsion文件。先考虑在内坐标下采用relax。
+2. 仅OAS、C6C、FTR对应的蛋白其score-rmsd能收敛至接近天然构象。
+
+#### 周五
+* 目标
+调整参数，对余下几个benchmark做结构优化。
+* 方法
+1. 在内坐标空间下，部分ncaa第一个chi角与天然结构的第一个chi角相差接近180度。假定天然结构就是最稳定的构象，则可能在结构优化时由于限制较多（骨架不能变动），导致第一步后的输入结构仍处于能量较高的情形。放松条件，打开骨架自由度，不固定坐标限制势进行测试。对于采样情况最差F2Y、TPO进行测试，输出二十个结构。
+* 结果
+1. 对于F2Y，score-rmsd能收敛至接近天然构象；对于TPO，仍然不能正确采样第一个chi角。考虑采用更激进的全局放松。
+
+### 下周目标
+调整参数，使得打分较低的蛋白能正确采样ncaa的chi角（至少能正确采样第一个chi角）；给出1ZKK的突变结果，开始非天然多肽的设计。
