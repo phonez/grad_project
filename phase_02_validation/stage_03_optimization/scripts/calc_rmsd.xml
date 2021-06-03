@@ -1,5 +1,6 @@
 <ROSETTASCRIPTS>               
     <SCOREFXNS>
+        <ScoreFunction name="r15" weights="ref2015"/>
     </SCOREFXNS>
 
     <RESIDUE_SELECTORS>
@@ -10,7 +11,7 @@
     </TASKOPERATIONS>
 
     <SIMPLE_METRICS>
-        <RMSDMetric name="rmsd_ah" rmsd_type="rmsd_all_heavy" use_native="1" super="1" residue_selector="ncaa"/>
+        <RMSDMetric name="rmsd_ah" rmsd_type="rmsd_all_heavy" use_native="1" residue_selector="ncaa"/>
     </SIMPLE_METRICS>
 
     <MOVERS>
@@ -21,4 +22,5 @@
         <Add mover="cal_rmsd_ah"/>
     </PROTOCOLS>
 
+    <OUTPUT scorefxn="r15"/>
 </ROSETTASCRIPTS>

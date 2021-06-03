@@ -2,12 +2,8 @@ rosetta_scripts.static.linuxgccrelease -s ./input/1A3U.pdb -parser:protocol ./sc
 rosetta_scripts.static.linuxgccrelease -s ./input/4IWW.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=BP5 -extra_res_fa ~/grad_project/ncaa_database/params/BP5.params -out:path:pdb output
 rosetta_scripts.static.linuxgccrelease -s ./input/5CI0.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=F2Y -extra_res_fa ~/grad_project/ncaa_database/params/F2Y.params -out:path:pdb output
 rosetta_scripts.static.linuxgccrelease -s ./input/6SQC.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=2ML -extra_res_fa ~/grad_project/ncaa_database/params/2ML.params -out:path:pdb output
-
 rosetta_scripts.static.linuxgccrelease -s ./input/3G3P.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=NLE -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params -out:path:pdb output
-rosetta_scripts.static.linuxgccrelease -s ./input/3RCE.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=PPN -extra_res_fa ~/grad_project/ncaa_database/params/PPN.params -out:path:pdb output
 rosetta_scripts.static.linuxgccrelease -s ./input/6BCY.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=TPO -extra_res_fa ~/grad_project/ncaa_database/params/TPO.params -out:path:pdb output
 rosetta_scripts.static.linuxgccrelease -s ./input/6V5T.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=FTR -extra_res_fa ~/grad_project/ncaa_database/params/FTR.params -out:path:pdb output
-
 rosetta_scripts.static.linuxgccrelease -s ./input/4XS7.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=OAS -extra_res_fa ~/grad_project/ncaa_database/params/OAS.params -out:path:pdb output
-rosetta_scripts.static.linuxgccrelease -s ./input/6PT7.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=OMT -extra_res_fa ~/grad_project/ncaa_database/params/OMT.params -out:path:pdb output
 rosetta_scripts.static.linuxgccrelease -s ./input/5OGL.pdb -parser:protocol ./scripts/mutate.xml -parser:script_vars ncaa=PPN -extra_res_fa ~/grad_project/ncaa_database/params/PPN.params -out:path:pdb output
