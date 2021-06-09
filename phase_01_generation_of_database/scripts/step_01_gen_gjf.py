@@ -1,7 +1,7 @@
 '''
 Convert mol file (initial structure) to gjf file (gaussian input file).
 We could also use Open Babel to get gjf files and then modify them.
-Alternatively, some other methods are acceptable for structures optimization.
+Alternatively, some other methods are acceptable for structure optimization.
 '''
 
 import sys
