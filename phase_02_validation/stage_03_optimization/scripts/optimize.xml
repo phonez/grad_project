@@ -15,7 +15,7 @@
 
     <MOVERS> 
         <MutateResidue name="mutate" residue_selector="mutant" new_res="%%ncaa%%"/>
-        ModifyVariantType name="modify" add_type="CTERM_AMIDATION" residue_selector="ncaa" />     
+        ModifyVariantType name="modify" add_type="LOWER_TERMINUS_VARIANT" residue_selector="mutant" update_polymer_bond_dependent_atoms="true"/>     
         <FastRelax name="relax_shell" scorefxn="r15" task_operations="init,cur">
             <MoveMap name="move_shell" bb="0" chi="0">
                 <ResidueSelector selector="shell" chi="1" bb="1"/>
