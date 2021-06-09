@@ -1,9 +1,5 @@
-relax.static.linuxgccrelease -s ../input/6SQC.pdb @relax_flags -extra_res_fa ~/grad_project/ncaa_database/params/2ML.params
-relax.static.linuxgccrelease -s ../input/3G3P.pdb @relax_flags -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params
-relax.static.linuxgccrelease -s ../input/6PT7.pdb @relax_flags -extra_res_fa ~/grad_project/ncaa_database/params/OMT.params
-relax.static.linuxgccrelease -s ../input/5OGL.pdb @relax_flags -extra_res_fa ~/grad_project/ncaa_database/params/PPN.params
+cd ./script;
 
-rosetta_scripts.static.linuxgccrelease -in:file:native ../input/3G3P.pdb -s ../input/3G3P.pdb  -parser:protocol ./optimize.xml -parser:script_vars ncaa=NLE -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params @opt_relax_flags
-rosetta_scripts.static.linuxgccrelease -in:file:native ../input/6PT7.pdb -s ../input/6PT7.pdb  -parser:protocol ./optimize.xml -parser:script_vars ncaa=OMT -extra_res_fa ~/grad_project/ncaa_database/params/OMT.params @opt_relax_flags
+relax.static.linuxgccrelease -s ../input/3G3P.pdb -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params @relax_flags
 
-rosetta_scripts.static.linuxgccrelease -in:file:native ../input/6BCY.pdb -s $(ls ../output/6BCY/*.pdb) -parser:protocol ./calc_rmsd.xml -parser:script_vars ncaa_name=TPO -extra_res_fa ~/grad_project/ncaa_database/params/TPO.params -out:file:score_only ../output/6BCY/rmsd_opt2.sc
+rosetta_scripts.static.linuxgccrelease -in:file:native ../input/3G3P_clean_0043.pdb -s ../input/3G3P_clean_0043.pdb  -parser:protocol ./optimize.xml -parser:script_vars ncaa=NLE -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params @opt_relax_flags
