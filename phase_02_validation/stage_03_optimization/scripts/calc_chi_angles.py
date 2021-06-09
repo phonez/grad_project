@@ -49,6 +49,6 @@ def get_chi_angles(ncaa, pdb_file):
             angle = calc_dihedral(atom_1.get_vector(), atom_2.get_vector(), atom_3.get_vector(), atom_4.get_vector())
             chi_angles.append(round(angle * 180 / math.pi, 2))
         ncaa_chi_angles.append(chi_angles)
-    print(f"After optimization, chi angles in each ncaa are: {ncaa_chi_angles}")
+    # print(f"After optimization, chi angles in each ncaa are: {ncaa_chi_angles}")
 
     return ncaa_chi_angles

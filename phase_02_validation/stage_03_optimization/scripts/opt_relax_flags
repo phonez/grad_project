@@ -8,7 +8,7 @@
 -packing:no_optH false
 -packing:flip_HNQ
 
--out:nstruct 1
+-out:nstruct 1000
 -out:suffix _opt
 -out:path:pdb ../output/
 -out:path:score ../output/
