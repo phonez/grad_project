@@ -1,12 +1,7 @@
-pkurun-cnlong 1 20 /lustre1/chuwang_pkuhpc/rosetta/rosetta_src_2019.47.61047_bundle/main/source/bin/relax.mpi.linuxiccrelease -s ./input/1ZKK.pdb @relax_flags
-pkurun-cnlong 2 20 /lustre1/chuwang_pkuhpc/rosetta/rosetta_src_2019.47.61047_bundle/main/source/bin/relax.mpi.linuxiccrelease -s ./input/1ZKK_itn_0005.pdb @relax_flags_cart
+cd ./scripts;
 
-/lustre1/chuwang_pkuhpc/rosetta/rosetta_src_2019.47.61047_bundle/main/source/bin/rosetta_scripts.mpi.linuxiccrelease -parser:protocol ./cal_rmsd.xml -in:file:native ./input/1ZKK.pdb -l ./output/*.pdb  -out:path:score output
+relax.static.linuxiccrelease -s ../input/1ZKK.pdb @relax_flags
 
-/lustre1/chuwang_pkuhpc/rosetta/rosetta_src_2019.47.61047_bundle/main/source/bin/rosetta_scripts.static.linuxgccrelease -parser:protocol ./cal_rmsd.xml -in:file:native ./input/1ZKK.pdb -l ./output/pdb_list.txt  -out:path:score output -score_only -out:suffix _rmsd_native
+rosetta_scripts.static.linuxgccrelease -parser:protocol ./opt_comp.xml -parser:script_vars resnum="20E" new_ncaa="NLE" -s ./input/1ZKK_clean_0005.pdb -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params -out:file:score_only ../output/comp_K20NLE.sc @comp_relax_flags
 
-rosetta_scripts.static.linuxgccrelease -parser:protocol ./scripts/mutate.xml -parser:script_vars orig_aa="20E" ncaa="NLE" -in:file:native ./input/5TEG_clean.pdb -s ./output/1ZKK_clean.pdb -out:path:score output -out:nstruct 1 -out:suffix _K20NLE -ex1 -ex2 -use_input_sc -flip_HNQ -no_optH false -crystal_refine -extra_res_fa /home/zhangf/grad_project/ncaa_database/params/NLE.params 
-
-rosetta_scripts.static.linuxgccrelease -parser:protocol ./scripts/optimize.xml -parser:script_vars orig_aa="20E" new_ncaa="NLE" -in:file:native ./input/5TEG.pdb -s ./input/1ZKK.pdb -out:path:score output -out:nstruct 1 -out:suffix _K20NLE -ex1 -ex2 -use_input_sc -flip_HNQ -no_optH false -crystal_refine -extra_res_fa /home/zhangf/grad_project/ncaa_database/params/NLE.params 
-
-
+rosetta_scripts.static.linuxgccrelease -parser:protocol ./opt_pep.xml -parser:script_vars resnum="20E" new_ncaa="NLE" -s ../input/peptide.pdb -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params -out:file:score_only ../output/pep_K20NLE.sc @pep_relax_flags
