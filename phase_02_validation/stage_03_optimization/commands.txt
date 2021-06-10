@@ -1,4 +1,4 @@
-cd ./script;
+cd ./scripts;
 
 relax.static.linuxgccrelease -s ../input/3G3P.pdb -extra_res_fa ~/grad_project/ncaa_database/params/NLE.params @relax_flags
 

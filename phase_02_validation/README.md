@@ -1,15 +1,14 @@
 ## benchmark
-	Select proteins containing ncaa and protein-peptide complexes containing ncaa from pdb as our benchmarks.
+	Select proteins or protein-peptide complexes containing ncaa from pdb as our benchmarks. They are tested from stage_01 to stage_03.
 
 ## stage_01_import_pdb
-	This step is to test if a params file has the correct file format. We need to test if rosetta can import a pdb file containing ncaa (with params file from ../ncaa_database).
+	This step is to test if rosetta can import the pdb file containing a specific ncaa (with params file from ../ncaa_database).
 
 ## stage_02_mutation
-	This step is to test if a residue at specified position in protein can be mutated to a ncaa.
+	This step is to test if the residue in protein can be mutated to a specific ncaa.
 	
 ## stage_03_optimization
-	This step is to test if a ncaa residue in protein has a reasonable conformation compared to native structure after structure optimization as well as a params file with correct bonds and internal coordinates.
-	
+	This step is to test if a specific ncaa residue in protein has the similar conformation compared to native structure after mutation and structure optimization.
 	
 ## stage_04_regeneration
-	This step is to test if our protocol can regenerate
+	This step is to test if our protocol can regenerate results consistent with experimental results (binding affinity of protein-peptide complex) by point mutation scan.
