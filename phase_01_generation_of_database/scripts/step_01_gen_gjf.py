@@ -9,8 +9,7 @@ import os
 
 in_mol_path = os.path.dirname(sys.path[0]) + "/input/mol/"
 gjf_path = os.path.dirname(sys.path[0]) + "/output/gjf/"
-# chk_path = os.path.dirname(sys.path[0]) + "/output/chk/" 
-chk_path = "/home/rotations/zhangf/gen_ncaa_params/output/chk/" # prepare gjf files from laptop
+chk_path = os.path.dirname(sys.path[0]) + "/output/chk/" 
 
 from rdkit import Chem
 

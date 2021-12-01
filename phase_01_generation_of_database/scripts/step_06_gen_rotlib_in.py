@@ -47,7 +47,7 @@ def gen_rotlib_in(ncaa):
             line_phi = f"PHI_RANGE {phi:>3} {phi:>3} 1"
             line_psi = f"PSI_RANGE {psi:>3} {psi:>3} 1"
 
-            in_name = f"{in_path}{ncaa}_rot_lib_options_{phi}_{psi}.in"
+            in_name = f"{in_path}{ncaa}_rotlib_options_{phi}_{psi}.in"
             with open(in_name, 'w+') as f:
                 f.write(f'AA_NAME {ncaa}\n')
                 f.write('OMG_RANGE 180 180 1\n')
@@ -66,10 +66,11 @@ def gen_rotlib_in(ncaa):
                     else:
                         f.write(f'ROTWELLS {rotwells} 3  60 180 300\n')
 
-def main(argv):
-    assert[len(argv) == 1]
-    ncaa = argv[0]
-    gen_rotlib_in(ncaa)
+ncaa_list = []
+for root, dirs, files in os.walk(params_path):
+    for params_file in files:
+        if os.path.splitext(params_file)[1] == ".params":
+            ncaa_list.append(os.path.splitext(params_file)[0])
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+for ncaa in ncaa_list:
+    gen_rotlib_in(ncaa)

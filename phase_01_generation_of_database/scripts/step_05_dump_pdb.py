@@ -19,4 +19,4 @@ pdb_file = pdb_path + ncaa + ".pdb"
 rosetta_option = "-in:file:extra_res_fa " + params_file
 
 init(extra_options=rosetta_option)
-pose_from_sequence(f"X[{ncaa}]").dump_pdb(pdb_file)
+pose_from_sequence(f"X[{ncaa}]").dump_pdb(pdb_file) # may conflict with the existed 3-character name in Rosetta NCAA Database
