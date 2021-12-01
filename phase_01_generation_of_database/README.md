@@ -13,8 +13,8 @@ Optional dependencies are
 ## Auto-generation of params file from SMILES
 
 ### Input
-* See example.txt. The first column represents the 3-character name, the second column represents the SMILES txt.
-* A directory containing mol files with given dipeptide 3D structure.
+* Option1: See example.txt. The first column represents the 3-character name, the second column represents the SMILES txt.
+* Option2: A directory containing mol files with given dipeptide 3D structure.
 
 ### Generate params file
 To generate params file, use gen_all.py script with the following options:
