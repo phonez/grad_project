@@ -22,7 +22,7 @@ To generate params file, use gen_all.py script with the following options:
 * `gaussian_opt`      bool, if True, use Gaussian 09 for the structure optimization of a dipeptide molecule; if False, use MMFF force field for optimization in rdkit from ./scripts/step_00_gen_dipeptide.py. False as default.
 * `check_params`      bool, if True, use pyrosetta to dump pdb to check if params file works. False as default.
 * `makerotlib`        str, name of the path of MakeRotLib app for the generation of rotlib file. An empty string as default.
-* `clean`             bool, if True, remove intermediate files. True as default.
+* `clean`             bool, if True, remove intermediate files. False as default.
 
 ```
 cd scripts
